@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import Link from "next/link";
 
 export default function LumpsumCalculator() {
     const [principal, setPrincipal] = useState<number>(100000); // Default principal amount
@@ -27,7 +28,8 @@ export default function LumpsumCalculator() {
             <Navbar />
             <div className="p-4 md:p-8 max-w-5xl mx-auto">
                 <h2 className="text-sm md:text-base text-gray-600 dark:text-gray-400">
-                    <a href="/">Home</a> &gt; <a href="/tools">Tools</a> &gt; Lumpsum Calculator
+                    <Link href="/" className="hover:underline">Home </Link> &gt;
+                    <Link href="/tools" className="hover:underline">Tools </Link> &gt; Lumpsum Calculator
                 </h2>
                 <h1 className="text-2xl md:text-3xl font-bold mt-4">Lumpsum Investment Calculator</h1>
 
@@ -61,11 +63,11 @@ export default function LumpsumCalculator() {
                                 <div className="flex justify-between items-center">
                                     <p className="text-sm mt-1 text-gray-600 dark:text-gray-400">{rateOfReturn}%</p>
                                     <input
-                                    type="number"
-                                    value={rateOfReturn}
-                                    onChange={(e) => setRateOfReturn(Number(e.target.value))}
-                                    className="w-24 p-2 mt-1 text-gray-600 dark:text-gray-400 bg-gray-200 dark:bg-gray-800 rounded"
-                                />
+                                        type="number"
+                                        value={rateOfReturn}
+                                        onChange={(e) => setRateOfReturn(Number(e.target.value))}
+                                        className="w-24 p-2 mt-1 text-gray-600 dark:text-gray-400 bg-gray-200 dark:bg-gray-800 rounded"
+                                    />
                                 </div>
                             </div>
 

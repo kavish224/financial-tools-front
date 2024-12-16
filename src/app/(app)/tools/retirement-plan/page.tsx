@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import Link from "next/link";
 
 export default function RetirementCalculator() {
     const [age, setAge] = useState<number>(25);
@@ -41,7 +42,8 @@ export default function RetirementCalculator() {
             <Navbar />
             <div className="p-4 md:p-8 max-w-5xl mx-auto">
                 <h2 className="text-sm md:text-base text-gray-600 dark:text-gray-400">
-                    <a href="/">Home</a> &gt; <a href="/tools">Tools</a> &gt; Retirement
+                    <Link href="/" className="hover:underline">Home </Link> &gt;
+                    <Link href="/tools" className="hover:underline">Tools </Link> &gt; Retirement
                 </h2>
                 <h1 className="text-2xl md:text-3xl font-bold mt-4">Retirement Calculator</h1>
 

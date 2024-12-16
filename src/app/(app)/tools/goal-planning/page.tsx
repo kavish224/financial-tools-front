@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import Link from "next/link";
 
 export default function GoalPlannerCalculator() {
     // State variables
@@ -19,7 +20,6 @@ export default function GoalPlannerCalculator() {
     const requiredMonthlyInvestment = (() => {
         const rate = expectedReturn / 100 / 12; // Monthly rate
         const periods = yearsToGoal * 12; // Total months
-        const presentValue = 0;
         const futureValue = futureValueOfGoal - futureValueOfInvestment;
 
         // Using PMT formula: PMT = [FV * r] / [(1 + r)^n - 1]
@@ -32,7 +32,8 @@ export default function GoalPlannerCalculator() {
             <Navbar />
             <div className="p-4 md:p-8 max-w-5xl mx-auto">
                 <h2 className="text-sm md:text-base text-gray-600 dark:text-gray-400">
-                    <a href="/">Home</a> &gt; <a href="/tools">Tools</a> &gt; Goal Planner
+                    <Link href="/" className="hover:underline">Home </Link> &gt;
+                    <Link href="/tools" className="hover:underline">Tools </Link> &gt; Goal Planner
                 </h2>
                 <h1 className="text-2xl md:text-3xl font-bold mt-4">Goal Planning Calculator</h1>
 
@@ -43,7 +44,7 @@ export default function GoalPlannerCalculator() {
                             {/* Financial Goal */}
                             <div>
                                 <label className="block font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    Financial Goal in Today's Value
+                                    Financial Goal in Today&#39;s Value
                                 </label>
                                 <input
                                     type="number"

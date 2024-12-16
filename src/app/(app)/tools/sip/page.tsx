@@ -5,6 +5,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import dynamic from "next/dynamic";
 import { ChartData, Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import Link from "next/link";
 
 // Register required Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -55,7 +56,8 @@ export default function SIPCalculator() {
             <Navbar />
             <div className="p-4 md:p-8 max-w-5xl mx-auto">
                 <h2 className="text-sm md:text-base text-gray-600 dark:text-gray-400">
-                    <a href="/">Home</a> &gt; <a href="/tools">Tools</a> &gt; SIP
+                    <Link href="/" className="hover:underline">Home </Link> &gt;
+                    <Link href="/tools" className="hover:underline">Tools </Link> &gt; SIP
                 </h2>
                 <h1 className="text-2xl md:text-3xl font-bold mt-4">SIP Calculator</h1>
 
