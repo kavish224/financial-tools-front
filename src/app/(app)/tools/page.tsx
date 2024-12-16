@@ -28,8 +28,8 @@ export default function ToolsPage() {
         <div className="min-h-screen">
             <Navbar />
             <div className="mb-4 pl-8 pt-8">
-                <h2 className="text-lg font-semibold">
-                    <a href="/">Home</a> &gt; Tools
+            <h2 className="text-sm md:text-base text-gray-600 dark:text-gray-400">
+                    <Link href="/" className="hover:underline">Home </Link> &gt; Tools
                 </h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
