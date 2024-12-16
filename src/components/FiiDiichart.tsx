@@ -7,7 +7,6 @@ import {
   Title,
   Tooltip,
   ChartOptions,
-  ChartTypeRegistry,
 } from 'chart.js';
 import React from 'react';
 
