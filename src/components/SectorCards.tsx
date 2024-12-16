@@ -1,5 +1,4 @@
 import HeatmapComponent from "./HeatMap"
-import TradingViewWidget from "./TradingViewWidget"
 
 export const SectorCards = () => {
     return (

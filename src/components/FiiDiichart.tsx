@@ -6,6 +6,8 @@ import {
   BarElement,
   Title,
   Tooltip,
+  ChartOptions,
+  ChartTypeRegistry,
 } from 'chart.js';
 import React from 'react';
 
@@ -28,23 +30,22 @@ const FIIDIIActivityChart: React.FC<FIIDIIActivityChartProps> = ({ fiiData, diiD
           diiData >= 0 ? 'rgba(60, 176, 164, 1)' : 'rgba(250, 100, 100, 1)', // Green for positive DII, Red for negative
         ],
         borderColor: isDarkMode ? '#ffffff' : '#000000',
-        // borderWidth: 1,
         borderRadius: 4,
       },
     ],
   };
 
-  const options: any = {
+  const options: ChartOptions<'bar'> = {
     responsive: true,
-    indexAxis: 'y' as const, // Horizontal bar chart
+    indexAxis: 'y', // Horizontal bar chart
     plugins: {
       legend: {
         display: false, // Hide legend
       },
       tooltip: {
         callbacks: {
-          label: (context: any) => {
-            let value = context.raw;
+          label: (context) => {
+            const value = context.raw as number;
             return `${value >= 0 ? '+' : ''}${value.toFixed(2)} crore`;
           },
         },
@@ -56,19 +57,15 @@ const FIIDIIActivityChart: React.FC<FIIDIIActivityChartProps> = ({ fiiData, diiD
     scales: {
       x: {
         beginAtZero: true,
-        // title: {
-        //   display: true,
-        //   text: '₹ (in crores)',
-        // },
         ticks: {
-          callback: (value: number) => `${value}`,
+          callback: (value) => `${value}`, // Formats the ticks on the x-axis
           color: isDarkMode ? '#ffffff' : '#000000',
         },
       },
       y: {
         ticks: {
           font: {
-            weight: 'bold' as const,
+            weight: 'bold',
           },
           color: isDarkMode ? '#ffffff' : '#000000',
         },
@@ -79,7 +76,7 @@ const FIIDIIActivityChart: React.FC<FIIDIIActivityChartProps> = ({ fiiData, diiD
   return (
     <div className="p-4 bg-[#fff] dark:bg-[#1c1d1f] rounded shadow-md w-64">
       <h3 className="font-bold text-lg">FII/DII Activity</h3>
-      <p className="text-sm  mb-4">Wed, 28 August 2024</p>
+      <p className="text-sm mb-4">Wed, 28 August 2024</p>
       <div className="flex items-center justify-between mb-2">
         <span>Net Buy/Sell</span>
         <span className="text-sm">(₹ in crores)</span>
