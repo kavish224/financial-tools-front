@@ -12,6 +12,7 @@ const LogoutButton = () => {
       await logout();
       router.push("/"); // Redirect to login after logout
     } catch (error) {
+      console.error(error);
       alert("Failed to log out. Please try again.");
     }
   };
