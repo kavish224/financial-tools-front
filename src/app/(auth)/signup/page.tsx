@@ -38,8 +38,13 @@ const Signup = () => {
             setMessage(response.message); // Display message to verify email
             alert("Signup successful, please check your email to verify.");
             router.push("/login"); // Optionally, redirect to login page after successful signup
-        } catch (err: any) {
-            setError(err.message || "Failed to sign up. Please try again.");
+        } catch (err: unknown) {
+            // Type 'unknown' instead of 'any'
+            if (err instanceof Error) {
+                setError(err.message || "Failed to sign up. Please try again.");
+            } else {
+                setError("An unknown error occurred.");
+            }
         } finally {
             setLoading(false);
         }
@@ -49,9 +54,14 @@ const Signup = () => {
         try {
             const result = await signInWithGoogle();
             console.log("Google signup successful:", result.user);
-        } catch (error: any) {
-            setError("Failed to sign up with Google. Please try again.");
-            console.error(error.message);
+        } catch (err: unknown) {
+            // Type 'unknown' instead of 'any'
+            if (err instanceof Error) {
+                setError("Failed to sign up with Google. Please try again.");
+                console.error(err.message);
+            } else {
+                setError("An unknown error occurred.");
+            }
         }
     };
 
@@ -124,4 +134,5 @@ const Signup = () => {
         </div>
     );
 };
+
 export default Signup;

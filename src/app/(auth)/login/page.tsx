@@ -26,19 +26,20 @@ const Login = () => {
     e.preventDefault();
     setError(""); // Clear previous error
     setLoading((prev) => ({ ...prev, email: true }));
-
+  
     try {
       await signIn(email, password);
       router.push("/"); // Redirect to home page upon successful login
-    } catch (err: any) {
-      console.error("Login error:", err);
-
-      // Check if it's the custom EmailNotVerifiedError
-      if (err instanceof Error && err.name === "EmailNotVerifiedError") {
-        setError("Please verify your email address before logging in.");
-      } else if (err instanceof Error) {
-        console.log("Caught error message:", err.message); // Log the error message for debugging
-        setError(err.message); // Set the error message from Firebase or custom error
+    } catch (err) {
+      // Type 'unknown' instead of 'any'
+      if (err instanceof Error) {
+        // Check for a custom error name or Firebase-specific errors
+        if (err.name === "EmailNotVerifiedError") {
+          setError("Please verify your email address before logging in.");
+        } else {
+          console.log("Caught error message:", err.message); // Log the error message for debugging
+          setError(err.message); // Set the error message from Firebase or custom error
+        }
       } else {
         setError("An unknown error occurred."); // Fallback error message
       }
@@ -46,18 +47,17 @@ const Login = () => {
       setLoading((prev) => ({ ...prev, email: false }));
     }
   };
-
+  
   const handleGoogleLogin = async () => {
     setError("");
     setLoading((prev) => ({ ...prev, google: true }));
-
+  
     try {
       await signInWithGoogle();
       alert("Logged in successfully!");
       router.push("/"); // Redirect to home page after Google login
-    } catch (err: any) {
-      console.error("Google login error:", err);
-
+    } catch (err) {
+      // Type 'unknown' instead of 'any'
       if (err instanceof Error) {
         setError(err.message); // Show specific error message
       } else {
@@ -66,7 +66,7 @@ const Login = () => {
     } finally {
       setLoading((prev) => ({ ...prev, google: false }));
     }
-  };
+  };  
 
   return (
     <div className="login-container flex justify-center items-center h-screen">
