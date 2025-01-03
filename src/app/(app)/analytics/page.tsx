@@ -33,26 +33,26 @@ function Page() {
     const [stocksgolden, setStocksgolden] = useState<Stockgolden[]>([]);
     const [stocks50sma, setStocks50sma] = useState<Stock50sma[]>([]);
 
-    useEffect(() => {
-        const fetchGoldenCross = async () => {
-            try {
-                const response = await axios.get("http://127.0.0.1:5001/v1/golden-cross");
-                setStocksgolden(response.data);
-            } catch (error) {
-                console.error("Error fetching stock data:", error);
-            }
-        };
-        const fetch50sma = async () => {
-            try {
-                const response = await axios.get("http://127.0.0.1:5001/v1/sma_crossings");
-                setStocks50sma(response.data);
-            } catch (error) {
-                console.error("Error fetching stock data:", error);
-            }
-        };
-        fetchGoldenCross();
-        fetch50sma();
-    }, []);
+    // useEffect(() => {
+    //     const fetchGoldenCross = async () => {
+    //         try {
+    //             const response = await axios.get("http://127.0.0.1:5001/v1/golden-cross");
+    //             setStocksgolden(response.data);
+    //         } catch (error) {
+    //             console.error("Error fetching stock data:", error);
+    //         }
+    //     };
+    //     const fetch50sma = async () => {
+    //         try {
+    //             const response = await axios.get("http://127.0.0.1:5001/v1/sma_crossings");
+    //             setStocks50sma(response.data);
+    //         } catch (error) {
+    //             console.error("Error fetching stock data:", error);
+    //         }
+    //     };
+    //     fetchGoldenCross();
+    //     fetch50sma();
+    // }, []);
 
     return (
         <div>

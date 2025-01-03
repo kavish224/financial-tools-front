@@ -2,12 +2,19 @@
 import { useState } from "react"
 import Link from "next/link"
 import { Button } from "./ui/button"
+import { useAuth } from "./AuthProvider"
+import LogoutButton from "./LogoutBtn" // Import the LogoutButton component
 
 export const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false)
+    const { user, loading } = useAuth(); // Get user and loading state from useAuth
 
     const toggleMenu = () => {
         setIsOpen(!isOpen)
+    }
+
+    if (loading) {
+        return <div>Loading...</div>; // Show loading state while checking auth status
     }
 
     return (
@@ -21,14 +28,20 @@ export const Navbar = () => {
                         <Link href={"/markets"} className="pr-4">Markets</Link>
                         <Link href={"/analytics"} className="pr-4">Analytics</Link>
                         <Link href={"/tools"} className="pr-4">Tools</Link>
-                        <Link href={"/"} className="pr-4">About Us</Link>
-                        <Link href={"/"} className="pr-4">Support</Link>
+                        <Link href={"/aboutus"} className="pr-4">About Us</Link>
+                        <Link href={"/support"} className="pr-4">Support</Link>
                     </div>
                 </div>
 
-                {/* Login Button (hidden on mobile) */}
+                {/* Login/Logout Button (hidden on mobile) */}
                 <div className="hidden md:block">
-                    <Button className="rounded-full p-5">Login</Button>
+                    {user ? (
+                        <LogoutButton /> // Show Logout button if user is logged in
+                    ) : (
+                        <Button className="rounded-full p-5">
+                            <Link href="/login">Login</Link>
+                        </Button>
+                    )}
                 </div>
 
                 {/* Hamburger Menu (for mobile) */}
@@ -46,11 +59,17 @@ export const Navbar = () => {
                     <Link href={"/markets"}>Markets</Link>
                     <Link href={"/analytics"}>Analytics</Link>
                     <Link href={"/tools"}>Tools</Link>
-                    <Link href={"/"}>About Us</Link>
-                    <Link href={"/"}>Support</Link>
-                    <Button className="rounded-full p-3 mt-4">Login</Button>
+                    <Link href={"/aboutus"}>About Us</Link>
+                    <Link href={"/support"}>Support</Link>
+                    {user ? (
+                        <LogoutButton /> // Show Logout button if user is logged in
+                    ) : (
+                        <Button className="rounded-full p-3 mt-4">
+                            <Link href="/login">Login</Link>
+                        </Button>
+                    )}
                 </div>
             </div>
         </nav>
     )
-}
+};

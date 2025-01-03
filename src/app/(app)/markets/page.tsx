@@ -9,10 +9,38 @@ import { Headlines } from '@/components/Headlines';
 import { Indices } from '@/components/Indices';
 import { Navbar } from '@/components/Navbar';
 import { SectorCards } from '@/components/SectorCards';
+import { useAuth } from "@/components/AuthProvider"; // Adjust the path as needed
+import { useRouter } from "next/navigation"; // For App Router
+import { useEffect } from "react";
 import MarketDashboard from '@/components/Sectors';
 
 import React from 'react';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 function Page() {
+    const { user, loading } = useAuth();
+    const router = useRouter();
+
+    // useEffect(() => {
+    //     if (!loading && !user) {
+            
+    //     }
+    // }, [loading, user, router]);
+
+    if (loading) {
+        return (<div>Loading...</div>); // Loading spinner while checking auth state
+    }
+
+    if (!user) {
+        return (
+            <div>
+                <div>Please login to view the market page</div>
+                <Button>
+                    <Link href="/login">Login</Link>
+                </Button>
+            </div>
+        );
+    }
     return (
         <div>
             <Navbar />
@@ -20,8 +48,8 @@ function Page() {
                 <section className="col-span-3 pl-2 pt-2"><Indices /></section>
                 <section className="col-span-3 pl-2 pt-2"><Graph /></section>
                 <section className="col-span-2 pl-2 pt-2"><FiiDii /></section>
-                <section className="col-span-4 m-2 ml-7"><Ad/></section>
-                
+                <section className="col-span-4 m-2 ml-7"><Ad /></section>
+
                 <section className="col-span-12 h-800px pr-2 pl-2 pb-2"><SectorCards /></section>
 
                 <section className="col-span-9 pl-2 pr-2"><MarketDashboard /></section>
