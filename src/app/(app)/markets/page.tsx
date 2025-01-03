@@ -10,16 +10,12 @@ import { Indices } from '@/components/Indices';
 import { Navbar } from '@/components/Navbar';
 import { SectorCards } from '@/components/SectorCards';
 import { useAuth } from "@/components/AuthProvider"; // Adjust the path as needed
-import { useRouter } from "next/navigation"; // For App Router
-import { useEffect } from "react";
 import MarketDashboard from '@/components/Sectors';
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 function Page() {
     const { user, loading } = useAuth();
-    const router = useRouter();
 
     // useEffect(() => {
     //     if (!loading && !user) {

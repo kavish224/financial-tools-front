@@ -16,6 +16,7 @@ const Login = () => {
       await signIn(email, password);
       router.push("/")    
     } catch (err) {
+      console.log(err);
       setError("Failed to login. Please check your credentials.");
     }
   };

@@ -1,8 +1,7 @@
 "use client";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     Table,
     TableBody,
@@ -30,8 +29,8 @@ interface Stock50sma {
 }
 
 function Page() {
-    const [stocksgolden, setStocksgolden] = useState<Stockgolden[]>([]);
-    const [stocks50sma, setStocks50sma] = useState<Stock50sma[]>([]);
+    const [stocksgolden] = useState<Stockgolden[]>([]);
+    const [stocks50sma] = useState<Stock50sma[]>([]);
 
     // useEffect(() => {
     //     const fetchGoldenCross = async () => {
