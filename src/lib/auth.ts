@@ -90,15 +90,13 @@ export const signUp = async (email: string, password: string) => {
 };
 
 // SignIn function
-// SignIn function
 export const signIn = async (email: string, password: string) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
     if (!userCredential.user.emailVerified) {
-      // Throw custom error when email is not verified
       const error = new Error("Please verify your email address before logging in.");
-      error.name = "EmailNotVerifiedError"; // Ensure this custom name
+      error.name = "EmailNotVerifiedError"; // Custom error name
       throw error;
     }
 
@@ -108,12 +106,10 @@ export const signIn = async (email: string, password: string) => {
     console.error("Error during login:", error);
 
     if (error instanceof Error) {
-      // Handling custom EmailNotVerifiedError
       if (error.name === "EmailNotVerifiedError") {
-        throw new Error(error.message); // Re-throw the custom error with the message
+        throw new Error(error.message); // Custom email verification error
       }
 
-      // Handle other Firebase errors
       if (error instanceof FirebaseError) {
         switch (error.code) {
           case "auth/invalid-credential":
@@ -139,7 +135,6 @@ export const signIn = async (email: string, password: string) => {
   }
 };
 
-
 // Logout function
 export const logout = async () => {
   try {
@@ -150,14 +145,20 @@ export const logout = async () => {
   }
 };
 
+// Password Reset function
 export const resetPassword = async (email: string) => {
   try {
+    // Step 1: Send password reset email
     await sendPasswordResetEmail(auth, email);
-    return "Password reset email sent! Please check your inbox.";
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
+
+    // Firebase does not explicitly indicate if the email is unregistered, so we provide a generic message
+    return "If an account is associated with this email, you'll receive a password reset email. Please check your inbox and follow the instructions.";
+  } catch (error: unknown) {
+    console.error("Error sending password reset email:", error);
+    if (error instanceof FirebaseError) {
+      throw new Error(getFirebaseErrorMessage(error));
     }
     throw new Error("Failed to send password reset email.");
   }
 };
+
