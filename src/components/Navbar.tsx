@@ -1,95 +1,106 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { useAuth } from "./AuthProvider";
 import LogoutButton from "./LogoutBtn"; // Import the LogoutButton component
-import { usePathname } from "next/navigation"; // Import usePathname
 
 export const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { user, loading } = useAuth(); // Get user and loading state from useAuth
-  const pathname = usePathname(); // Get the current path
+    const [isOpen, setIsOpen] = useState(false);
+    const { user, loading } = useAuth(); // Get user and loading state from useAuth
+    const menuRef = useRef<HTMLDivElement>(null); // Ref for the menu container
+    const buttonRef = useRef<HTMLButtonElement>(null); // Ref for the menu button
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
+    const toggleMenu = () => {
+        setIsOpen((prev) => !prev);
+    };
 
-  // Check if the current page is login or signup
-  const isAuthPage = pathname === "/login" || pathname === "/signup";
+    // Close menu if clicked outside
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            const target = event.target as Node;
+            if (
+                menuRef.current &&
+                !menuRef.current.contains(target) &&
+                buttonRef.current &&
+                !buttonRef.current.contains(target)
+            ) {
+                setIsOpen(false); // Close the menu
+            }
+        };
 
-  if (loading) {
-    return <div>Loading...</div>; // Show loading state while checking auth status
-  }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
-  return (
-    <nav className="p-4 shadow-lg text-l dark:bg-[#1c1d1f]">
-      <div className="flex items-center justify-between flex-wrap">
-        {/* Logo */}
-        <div>
-          <Link href={"/"}>Logo</Link>
-        </div>
+    if (loading) {
+        return <div>Loading...</div>; // Show loading state while checking auth status
+    }
 
-        {!isAuthPage ? (
-          <>
-            {/* Links (hidden on mobile) */}
-            <div className="hidden md:flex space-x-4">
-              <Link href={"/"}>Home</Link>
-              <Link href={"/markets"}>Markets</Link>
-              <Link href={"/analytics"}>Analytics</Link>
-              <Link href={"/tools"}>Tools</Link>
-              <Link href={"/aboutus"}>About Us</Link>
-              <Link href={"/support"}>Support</Link>
+    return (
+        <nav className="p-4 shadow-lg text-l dark:bg-[#1c1d1f]">
+            <div className="flex items-center justify-between">
+                {/* Links (hidden on mobile) */}
+                <div className="hidden md:flex space-x-4">
+                    <Link href={"/"}>Logo</Link>
+                    <Link href={"/"}>Home</Link>
+                    <Link href={"/markets"}>Markets</Link>
+                    <Link href={"/analytics"}>Analytics</Link>
+                    <Link href={"/tools"}>Tools</Link>
+                    <Link href={"/aboutus"}>About Us</Link>
+                    <Link href={"/support"}>Support</Link>
+                </div>
+
+                {/* Login/Logout Button */}
+                <div className="hidden md:block">
+                    {user ? (
+                        <LogoutButton /> // Show Logout button if user is logged in
+                    ) : (
+                        <Button className="rounded-full p-5">
+                            <Link href="/login">Login</Link>
+                        </Button>
+                    )}
+                </div>
+                {/* Hamburger Menu (for mobile) */}
+                <div className="md:hidden flex items-center justify-between w-full">
+                    <Link href={"/"} className="text-xl">
+                        Logo
+                    </Link>
+                    <Button
+                        ref={buttonRef}
+                        className="rounded-full text-xl"
+                        onClick={toggleMenu}
+                        variant={"ghost"}
+                    >
+                        ☰
+                    </Button>
+                </div>
             </div>
 
-            {/* Login/Logout Button */}
-            <div className="hidden md:block">
-              {user ? (
-                <LogoutButton /> // Show Logout button if user is logged in
-              ) : (
-                <Button className="rounded-full p-5">
-                  <Link href="/login">Login</Link>
-                </Button>
-              )}
-            </div>
+            {/* Mobile Menu */}
 
-            {/* Hamburger Menu (for mobile) */}
-            <div className="md:hidden flex items-center">
-              <Button className="rounded-full p-3" onClick={toggleMenu}>
-                ☰
-              </Button>
+            <div
+                ref={menuRef}
+                className={`md:hidden ${isOpen ? "block" : "hidden"} mt-4`}
+            >
+                <div className="flex flex-col items-center space-y-4">
+                    <Link href={"/"}>Home</Link>
+                    <Link href={"/markets"}>Markets</Link>
+                    <Link href={"/analytics"}>Analytics</Link>
+                    <Link href={"/tools"}>Tools</Link>
+                    <Link href={"/aboutus"}>About Us</Link>
+                    <Link href={"/support"}>Support</Link>
+                    {user ? (
+                        <LogoutButton /> // Show Logout button if user is logged in
+                    ) : (
+                        <Button className="rounded-full p-3 mt-4">
+                            <Link href="/login">Login</Link>
+                        </Button>
+                    )}
+                </div>
             </div>
-          </>
-        ) : (
-          // Minimal Navbar for Auth Pages
-          <div className="hidden md:block">
-            <Link href="/" className="underline">
-              Back to Home
-            </Link>
-          </div>
-        )}
-      </div>
-
-      {/* Mobile Menu */}
-      {!isAuthPage && (
-        <div className={`md:hidden ${isOpen ? "block" : "hidden"} mt-4`}>
-          <div className="flex flex-col items-center space-y-4">
-            <Link href={"/"}>Home</Link>
-            <Link href={"/markets"}>Markets</Link>
-            <Link href={"/analytics"}>Analytics</Link>
-            <Link href={"/tools"}>Tools</Link>
-            <Link href={"/aboutus"}>About Us</Link>
-            <Link href={"/support"}>Support</Link>
-            {user ? (
-              <LogoutButton /> // Show Logout button if user is logged in
-            ) : (
-              <Button className="rounded-full p-3 mt-4">
-                <Link href="/login">Login</Link>
-              </Button>
-            )}
-          </div>
-        </div>
-      )}
-    </nav>
-  );
+        </nav>
+    );
 };
