@@ -49,6 +49,7 @@ const Signup = () => {
             const result = await signInWithGoogle();
             console.log("Google signup successful:", result.user);
             setMessage("Google signup successful!");
+            router.push("/");
         } catch (err: unknown) {
             if (err instanceof Error) {
                 setError("Failed to sign up with Google. Please try again.");
@@ -131,7 +132,7 @@ const Signup = () => {
                             {loading ? "Signing up with Google..." : "Continue with Google"}
                         </span>
                     </Button>
-                    
+
                 </CardContent>
                 <CardFooter className="flex justify-center">
                     <p>
