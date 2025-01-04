@@ -7,6 +7,7 @@ import {
   signOut,
   fetchSignInMethodsForEmail,
   linkWithCredential,
+  sendPasswordResetEmail
 } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { auth } from "./firebase";
@@ -146,5 +147,17 @@ export const logout = async () => {
   } catch (error: unknown) {
     console.error("Error signing out:", error);
     throw error;
+  }
+};
+
+export const resetPassword = async (email: string) => {
+  try {
+    await sendPasswordResetEmail(auth, email);
+    return "Password reset email sent! Please check your inbox.";
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("Failed to send password reset email.");
   }
 };
