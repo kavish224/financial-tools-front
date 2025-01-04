@@ -1,17 +1,12 @@
 "use client";
+
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { signUp, signInWithGoogle } from "@/lib/auth";
-import { useRouter } from "next/navigation"; // For redirection after signup
+import { useRouter } from "next/navigation";
 
 const Signup = () => {
     const [email, setEmail] = useState("");
@@ -19,13 +14,13 @@ const Signup = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState(""); // New state to hold success message
+    const [message, setMessage] = useState("");
     const router = useRouter();
 
     const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
-        setMessage(""); // Clear previous messages
+        setMessage("");
 
         if (password !== confirmPassword) {
             setError("Passwords do not match");
@@ -35,11 +30,9 @@ const Signup = () => {
         try {
             setLoading(true);
             const response = await signUp(email, password);
-            setMessage(response.message); // Display message to verify email
-            alert("Signup successful, please check your email to verify.");
-            router.push("/login"); // Optionally, redirect to login page after successful signup
+            setMessage(response.message || "Signup successful! Please verify your email.");
+            router.push("/login");
         } catch (err: unknown) {
-            // Type 'unknown' instead of 'any'
             if (err instanceof Error) {
                 setError(err.message || "Failed to sign up. Please try again.");
             } else {
@@ -51,14 +44,14 @@ const Signup = () => {
     };
 
     const handleGoogleSignup = async () => {
+        setError("");
         try {
             const result = await signInWithGoogle();
             console.log("Google signup successful:", result.user);
+            setMessage("Google signup successful!");
         } catch (err: unknown) {
-            // Type 'unknown' instead of 'any'
             if (err instanceof Error) {
                 setError("Failed to sign up with Google. Please try again.");
-                console.error(err.message);
             } else {
                 setError("An unknown error occurred.");
             }
@@ -109,18 +102,48 @@ const Signup = () => {
                             <Button type="submit" className="w-full" disabled={loading}>
                                 {loading ? "Signing up..." : "Signup"}
                             </Button>
-                            {error && <p style={{ color: "red" }}>{error}</p>}
-                            {message && <p style={{ color: "green" }}>{message}</p>}
+                            {error && <p className="text-red-500 text-sm pt-2">{error}</p>}
+                            {message && <p className="text-green-500 text-sm pt-2">{message}</p>}
                         </div>
                     </form>
                     <Button
                         type="button"
                         onClick={handleGoogleSignup}
-                        className="w-full"
-                        variant="outline"
+                        className="w-full flex items-center justify-center bg-white border border-gray-300 rounded-md px-4 py-2 shadow-sm hover:bg-gray-100 transition disabled:opacity-50"
+                        disabled={loading}
                     >
-                        Sign Up with Google
+                        <div className="flex items-center justify-center">
+                            <svg
+                                version="1.1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 48 48"
+                                xmlnsXlink="http://www.w3.org/1999/xlink"
+                                className="w-5 h-5"
+                            >
+                                <path
+                                    fill="#EA4335"
+                                    d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"
+                                ></path>
+                                <path
+                                    fill="#4285F4"
+                                    d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"
+                                ></path>
+                                <path
+                                    fill="#FBBC05"
+                                    d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"
+                                ></path>
+                                <path
+                                    fill="#34A853"
+                                    d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+                                ></path>
+                                <path fill="none" d="M0 0h48v48H0z"></path>
+                            </svg>
+                        </div>
+                        <span className="ml-2 text-gray-700 text-sm font-medium">
+                            {loading ? "Signing up with Google..." : "Continue with Google"}
+                        </span>
                     </Button>
+
                 </CardContent>
                 <CardFooter className="flex justify-center">
                     <p>
