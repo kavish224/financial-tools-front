@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "./ui/button";
 import { useAuth } from "./AuthProvider";
 import LogoutButton from "./LogoutBtn"; // Import the LogoutButton component
+import { ModeToggle } from "./DarkModeBtn";
 
 export const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -43,8 +44,8 @@ export const Navbar = () => {
         <nav className="p-4 shadow-lg text-l dark:bg-[#1c1d1f]">
             <div className="flex items-center justify-between">
                 {/* Links (hidden on mobile) */}
-                <div className="hidden md:flex space-x-4">
-                    <Link href={"/"}>Logo</Link>
+                <div className="hidden md:flex items-center space-x-4">
+                    <Link href={"/"} className="pr-8">Logo</Link>
                     <Link href={"/"}>Home</Link>
                     <Link href={"/markets"}>Markets</Link>
                     <Link href={"/analytics"}>Analytics</Link>
@@ -53,16 +54,18 @@ export const Navbar = () => {
                     <Link href={"/support"}>Support</Link>
                 </div>
 
-                {/* Login/Logout Button */}
-                <div className="hidden md:block">
+                {/* Mode Toggle and Login/Logout */}
+                <div className="hidden md:flex items-center space-x-4">
+                    <ModeToggle />
                     {user ? (
                         <LogoutButton /> // Show Logout button if user is logged in
                     ) : (
-                        <Button className="rounded-full p-5">
+                        <Button className="rounded-full px-5 py-2">
                             <Link href="/login">Login</Link>
                         </Button>
                     )}
                 </div>
+
                 {/* Hamburger Menu (for mobile) */}
                 <div className="md:hidden flex items-center justify-between w-full">
                     <Link href={"/"} className="text-xl">
@@ -80,7 +83,6 @@ export const Navbar = () => {
             </div>
 
             {/* Mobile Menu */}
-
             <div
                 ref={menuRef}
                 className={`md:hidden ${isOpen ? "block" : "hidden"} mt-4`}
@@ -92,10 +94,11 @@ export const Navbar = () => {
                     <Link href={"/tools"}>Tools</Link>
                     <Link href={"/aboutus"}>About Us</Link>
                     <Link href={"/support"}>Support</Link>
+                    <ModeToggle />
                     {user ? (
-                        <LogoutButton /> // Show Logout button if user is logged in
+                        <LogoutButton />
                     ) : (
-                        <Button className="rounded-full p-3 mt-4">
+                        <Button className="rounded-full px-5 py-2">
                             <Link href="/login">Login</Link>
                         </Button>
                     )}
