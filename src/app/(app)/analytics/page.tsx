@@ -11,6 +11,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import TradingViewChart from "@/components/TradingViewChart";
+import TradingViewWidget from "@/components/TradingViewWidget";
 
 // Define the stock data type
 interface Stockgolden {
@@ -53,62 +55,78 @@ function Page() {
     //     fetch50sma();
     // }, []);
 
+    // return (
+    //     <div>
+    //         <Navbar />
+    //         <div className="flex-grow flex justify-center min-h-screen">
+    //             <div>
+    //                 <div>Golden Cross</div>
+    //                 <Table>
+    //                     <TableCaption>Stocks with SMA Crossings</TableCaption>
+    //                     <TableHeader>
+    //                         <TableRow>
+    //                             <TableHead>Stock Name</TableHead>
+    //                             <TableHead>Closing Price</TableHead>
+    //                             <TableHead>SMA 50</TableHead>
+    //                             <TableHead>SMA 200</TableHead>
+    //                         </TableRow>
+    //                     </TableHeader>
+    //                     <TableBody>
+    //                         {stocksgolden.map((stock) => (
+    //                             <TableRow key={stock.symbol}> {/* Use `symbol` as the key */}
+    //                                 <TableCell className="font-medium">{stock.stock_name}</TableCell>
+    //                                 <TableCell>{stock.price}</TableCell>
+    //                                 <TableCell>{stock.sma50}</TableCell>
+    //                                 <TableCell>{stock.sma200}</TableCell>
+    //                             </TableRow>
+    //                         ))}
+    //                     </TableBody>
+    //                 </Table>
+    //             </div>
+    //             <div>
+    //                 <div>50 SMA</div>
+    //                 <Table>
+    //                     <TableCaption>Stocks with SMA Crossings</TableCaption>
+    //                     <TableHeader>
+    //                         <TableRow>
+    //                             <TableHead>Stock Name</TableHead>
+    //                             <TableHead>Closing Price</TableHead>
+    //                             <TableHead>SMA 50</TableHead>
+    //                             <TableHead>Crossing</TableHead>
+    //                         </TableRow>
+    //                     </TableHeader>
+    //                     <TableBody>
+    //                         {stocks50sma.map((stock) => (
+    //                             <TableRow key={stock.symbol}> {/* Use `symbol` as the key */}
+    //                                 <TableCell className="font-medium">{stock.stock_name}</TableCell>
+    //                                 <TableCell>{stock.price}</TableCell>
+    //                                 <TableCell>{stock.sma50}</TableCell>
+    //                                 <TableCell>{stock.crossing}</TableCell>
+    //                             </TableRow>
+    //                         ))}
+    //                     </TableBody>
+    //                 </Table>
+    //             </div>
+    //         </div>
+    //         <Footer />
+    //     </div>
+    // );
     return (
         <div>
             <Navbar />
-            <div className="flex-grow flex justify-center min-h-screen">
-                <div>
-                    <div>Golden Cross</div>
-                    <Table>
-                        <TableCaption>Stocks with SMA Crossings</TableCaption>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Stock Name</TableHead>
-                                <TableHead>Closing Price</TableHead>
-                                <TableHead>SMA 50</TableHead>
-                                <TableHead>SMA 200</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {stocksgolden.map((stock) => (
-                                <TableRow key={stock.symbol}> {/* Use `symbol` as the key */}
-                                    <TableCell className="font-medium">{stock.stock_name}</TableCell>
-                                    <TableCell>{stock.price}</TableCell>
-                                    <TableCell>{stock.sma50}</TableCell>
-                                    <TableCell>{stock.sma200}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </div>
-                <div>
-                    <div>50 SMA</div>
-                    <Table>
-                        <TableCaption>Stocks with SMA Crossings</TableCaption>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Stock Name</TableHead>
-                                <TableHead>Closing Price</TableHead>
-                                <TableHead>SMA 50</TableHead>
-                                <TableHead>Crossing</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {stocks50sma.map((stock) => (
-                                <TableRow key={stock.symbol}> {/* Use `symbol` as the key */}
-                                    <TableCell className="font-medium">{stock.stock_name}</TableCell>
-                                    <TableCell>{stock.price}</TableCell>
-                                    <TableCell>{stock.sma50}</TableCell>
-                                    <TableCell>{stock.crossing}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+            <div className="min-h-screen">
+                <div className="flex flex-col justify-center items-center pt-16">
+                    <p className="text-3xl">
+                        Analytics
+                    </p>
+                    <p className="text-xl pt-4">
+                       Coming Soon....
+                    </p>
                 </div>
             </div>
             <Footer />
         </div>
-    );
+    )
 }
 
 export default Page;
