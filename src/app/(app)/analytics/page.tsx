@@ -1,7 +1,6 @@
 "use client";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
-import { useState } from "react";
 // Define the stock data type
 // interface Stockgolden {
 //     stock_name: string;
