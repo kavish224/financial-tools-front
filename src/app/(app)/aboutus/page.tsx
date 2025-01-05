@@ -21,7 +21,7 @@ function AboutUsPage() {
                         With a focus on simplicity and accessibility, we help you track and analyze Nifty 500 stocks, providing the data you need to make informed decisions.
                     </p>
                     <p className="text-lg max-w-3xl text-center mb-6">
-                        Whether you're a seasoned investor or just getting started, we offer tools to help you navigate the stock market with confidence. 
+                        Whether you&apos;re a seasoned investor or just getting started, we offer tools to help you navigate the stock market with confidence. 
                         Let us help you achieve your financial goals by providing the tools and resources necessary to make better investment decisions.
                     </p>
                 </div>

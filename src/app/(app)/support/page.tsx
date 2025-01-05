@@ -16,7 +16,7 @@ function SupportPage() {
             Support Center
           </h1>
           <p className="text-lg max-w-3xl text-center mb-6">
-            Have questions or need assistance? We're here to help! Our support team is available to answer your queries and guide you through using our platform effectively.
+            Have questions or need assistance? We&apos;re here to help! Our support team is available to answer your queries and guide you through using our platform effectively.
           </p>
 
           <div className="w-full max-w-4xl mb-8">
@@ -115,7 +115,7 @@ function SupportPage() {
                   What do I do if I face technical issues?
                 </AccordionTrigger>
                 <AccordionContent>
-                  If you're experiencing any technical difficulties, you can contact us via email or live chat, and our team will assist you as soon as possible.
+                  If you&apos;re experiencing any technical difficulties, you can contact us via email or live chat, and our team will assist you as soon as possible.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>

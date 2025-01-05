@@ -2,37 +2,25 @@
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { useState } from "react";
-import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import TradingViewChart from "@/components/TradingViewChart";
-import TradingViewWidget from "@/components/TradingViewWidget";
-
 // Define the stock data type
-interface Stockgolden {
-    stock_name: string;
-    price: number;
-    sma50: number;
-    sma200: number;
-    symbol: string; // Ensure there is a unique identifier
-}
-interface Stock50sma {
-    stock_name: string;
-    price: number;
-    sma50: number;
-    crossing: string;
-    symbol: string; // Ensure there is a unique identifier
-}
+// interface Stockgolden {
+//     stock_name: string;
+//     price: number;
+//     sma50: number;
+//     sma200: number;
+//     symbol: string; // Ensure there is a unique identifier
+// }
+// interface Stock50sma {
+//     stock_name: string;
+//     price: number;
+//     sma50: number;
+//     crossing: string;
+//     symbol: string; // Ensure there is a unique identifier
+// }
 
 function Page() {
-    const [stocksgolden] = useState<Stockgolden[]>([]);
-    const [stocks50sma] = useState<Stock50sma[]>([]);
+    // const [stocksgolden] = useState<Stockgolden[]>([]);
+    // const [stocks50sma] = useState<Stock50sma[]>([]);
 
     // useEffect(() => {
     //     const fetchGoldenCross = async () => {
