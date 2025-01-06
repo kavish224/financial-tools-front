@@ -134,7 +134,7 @@ const Login = () => {
           <Button
             type="button"
             onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-md py-2 px-4 shadow-sm hover:bg-gray-100 transition disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-md py-2 px-4 shadow-sm hover:bg-gray-100 dark:hover:text-black transition disabled:opacity-50"
             variant="outline"
             disabled={loading}
             aria-live="polite"
