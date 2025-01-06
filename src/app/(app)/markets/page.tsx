@@ -19,12 +19,16 @@ function Page() {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <div>Loading...</div>; // Loading spinner while checking auth state
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div>Loading...</div>
+      </div>
+    );
   }
 
   if (!user) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen bg-gray-100 dark:bg-gray-900">
+      <div className="flex flex-col items-center justify-center h-screen">
         <div className="text-lg mb-4">Please login to view the market page</div>
         <Button>
           <Link href="/login">Login</Link>
@@ -36,19 +40,19 @@ function Page() {
   return (
     <div>
       <Navbar />
-      <div className="grid grid-cols-12 gap-4 p-4 bg-gray-100 dark:bg-[#000]">
+      <div className="grid grid-cols-12 gap-4 p-4">
         {/* Indices Section */}
-        <section className="col-span-12 md:col-span-4 lg:col-span-3">
+        <section className="col-span-12 sm:col-span-6 lg:col-span-3">
           <Indices />
         </section>
 
         {/* Graph Section */}
-        <section className="col-span-12 md:col-span-4 lg:col-span-3">
+        <section className="col-span-12 sm:col-span-6 lg:col-span-3">
           <Graph />
         </section>
 
         {/* FII/DII Section */}
-        <section className="col-span-12 md:col-span-4 lg:col-span-2">
+        <section className="col-span-12 sm:col-span-6 lg:col-span-2">
           <FiiDii />
         </section>
 
