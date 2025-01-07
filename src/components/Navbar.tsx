@@ -47,7 +47,7 @@ export const Navbar = () => {
                 <div className="hidden md:flex items-center space-x-4">
                     <Link href={"/"} className="pr-8">Logo</Link>
                     <Link href={"/"}>Home</Link>
-                    <Link href={"/markets"}>Markets</Link>
+                    {/* <Link href={"/markets"}>Markets</Link> */}
                     <Link href={"/analytics"}>Analytics</Link>
                     <Link href={"/tools"}>Tools</Link>
                     <Link href={"/aboutus"}>About Us</Link>
@@ -89,7 +89,7 @@ export const Navbar = () => {
             >
                 <div className="flex flex-col items-center space-y-4">
                     <Link href={"/"}>Home</Link>
-                    <Link href={"/markets"}>Markets</Link>
+                    {/* <Link href={"/markets"}>Markets</Link> */}
                     <Link href={"/analytics"}>Analytics</Link>
                     <Link href={"/tools"}>Tools</Link>
                     <Link href={"/aboutus"}>About Us</Link>
