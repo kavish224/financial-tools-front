@@ -73,49 +73,48 @@ export default function ToolsPage() {
     ];
 
     return (
-        <div >
+        <div>
             <Navbar />
             <div className="min-h-screen">
-            <div className="mb-4 pl-8 pt-8">
-                <h2 className="text-sm md:text-base text-gray-600 dark:text-gray-400">
-                    <Link href="/" className="hover:underline">Home </Link> &gt; Tools
-                </h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-                {tools.map((tool, index) => (
-                    <Card
-                        key={index}
-                        className="bg-white shadow-md hover:shadow-lg transition-shadow duration-300 flex dark:bg-[#1c1d1f]"
-                    >
-                        {/* Image Section */}
-                        <div className="relative w-1/3 h-auto rounded-l-md pb-4 pt-4 pl-4">
-                            <Image
-                                src={tool.image}
-                                alt={tool.title}
-                                fill
-                                className="object-cover rounded-l-md"
-                            />
-                        </div>
-
-                        {/* Content Section */}
-                        <div className="flex flex-col justify-between w-2/3 p-8">
-                            <CardHeader className="p-0">
-                                <CardTitle className="font-semibold">{tool.title}</CardTitle>
-                            </CardHeader>
-                            <CardContent className="p-0 mt-2">
-                                <CardDescription className="text-sm dark:text-slate-100">
-                                    {tool.description}
-                                </CardDescription>
-                            </CardContent>
-                            <CardFooter className="p-0 mt-4">
-                                <Link href={tool.path}>
-                                    <Button>Calculate</Button>
-                                </Link>
-                            </CardFooter>
-                        </div>
-                    </Card>
-                ))}
-            </div>
+                <div className="mb-4 pl-8 pt-8">
+                    <h2 className="text-sm md:text-base text-gray-600 dark:text-gray-400">
+                        <Link href="/" className="hover:underline">Home </Link> &gt; Tools
+                    </h2>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+                    {tools.map((tool, index) => (
+                        <Card
+                            key={index}
+                            className="bg-white shadow-md hover:shadow-lg transition-shadow duration-300 flex dark:bg-[#1c1d1f]"
+                        >
+                            {/* Image Section */}
+                            <div className="relative w-1/3 aspect-square rounded-l-md overflow-hidden">
+                                <Image
+                                    src={tool.image}
+                                    alt={tool.title}
+                                    fill
+                                    className="object-cover rounded-l-md"
+                                />
+                            </div>
+                            {/* Content Section */}
+                            <div className="flex flex-col justify-between w-2/3 p-6">
+                                <CardHeader className="p-0">
+                                    <CardTitle className="font-semibold">{tool.title}</CardTitle>
+                                </CardHeader>
+                                <CardContent className="p-0 mt-2">
+                                    <CardDescription className="text-sm dark:text-slate-100">
+                                        {tool.description}
+                                    </CardDescription>
+                                </CardContent>
+                                <CardFooter className="p-0 mt-4">
+                                    <Link href={tool.path}>
+                                        <Button>Calculate</Button>
+                                    </Link>
+                                </CardFooter>
+                            </div>
+                        </Card>
+                    ))}
+                </div>
             </div>
             <Footer />
         </div>
