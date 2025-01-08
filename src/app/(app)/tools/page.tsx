@@ -16,19 +16,68 @@ import Link from "next/link";
 
 export default function ToolsPage() {
     const tools = [
-        { title: "SIP", description: "Systematic Investment Plan calculator.", path: "/tools/sip" },
-        { title: "SWP", description: "Systematic Withdrawal Plan calculator.", path: "/tools/swp" },
-        { title: "Goal Planning", description: "Plan your financial goals effectively.", path: "/tools/goal-planning" },
-        { title: "FIRE", description: "Financial Independence, Retire Early calculator.", path: "/tools/fire" },
-        { title: "Retirement Plan", description: "Plan for a secure retirement.", path: "/tools/retirement-plan" },
-        { title: "Lumpsum Calculator", description: "Calculate returns for a lumpsum investment.", path: "/tools/lumpsum-calc" },
+        {
+            title: "SIP",
+            description: "Systematic Investment Plan calculator.",
+            path: "/tools/sip",
+            image: "/images/tools/sip.jpg",
+        },
+        {
+            title: "SWP",
+            description: "Systematic Withdrawal Plan calculator.",
+            path: "/tools/swp",
+            image: "/images/tools/swp.jpg",
+        },
+        {
+            title: "Goal Planning",
+            description: "Plan your financial goals effectively.",
+            path: "/tools/goal-planning",
+            image: "/images/tools/goal.jpg",
+        },
+        {
+            title: "FIRE",
+            description: "Financial Independence, Retire Early calculator.",
+            path: "/tools/fire",
+            image: "/images/tools/fire.jpg",
+        },
+        {
+            title: "Retirement Plan",
+            description: "Plan for a secure retirement.",
+            path: "/tools/retirement-plan",
+            image: "/images/tools/retire.jpg",
+        },
+        {
+            title: "Lumpsum Calculator",
+            description: "Calculate returns for a lumpsum investment.",
+            path: "/tools/lumpsum-calc",
+            image: "/images/tools/lumpsum.jpg",
+        },
+        {
+            title: "Lumpsum Calculator",
+            description: "Calculate returns for a lumpsum investment.",
+            path: "/tools/lumpsum-calc",
+            image: "/images/tools/lumpsum.jpg",
+        },
+        {
+            title: "Lumpsum Calculator",
+            description: "Calculate returns for a lumpsum investment.",
+            path: "/tools/lumpsum-calc",
+            image: "/images/tools/lumpsum.jpg",
+        },
+        {
+            title: "Lumpsum Calculator",
+            description: "Calculate returns for a lumpsum investment.",
+            path: "/tools/lumpsum-calc",
+            image: "/images/tools/lumpsum.jpg",
+        },
     ];
 
     return (
-        <div className="min-h-screen">
+        <div >
             <Navbar />
+            <div className="min-h-screen">
             <div className="mb-4 pl-8 pt-8">
-            <h2 className="text-sm md:text-base text-gray-600 dark:text-gray-400">
+                <h2 className="text-sm md:text-base text-gray-600 dark:text-gray-400">
                     <Link href="/" className="hover:underline">Home </Link> &gt; Tools
                 </h2>
             </div>
@@ -41,7 +90,7 @@ export default function ToolsPage() {
                         {/* Image Section */}
                         <div className="relative w-1/3 h-auto rounded-l-md pb-4 pt-4 pl-4">
                             <Image
-                                src="https://cdnlearnblog.etmoney.com/wp-content/uploads/2023/04/benefits-of-sip-Featured.jpg"
+                                src={tool.image}
                                 alt={tool.title}
                                 fill
                                 className="object-cover rounded-l-md"
@@ -66,6 +115,7 @@ export default function ToolsPage() {
                         </div>
                     </Card>
                 ))}
+            </div>
             </div>
             <Footer />
         </div>
