@@ -21,22 +21,18 @@ export default function ELSSCalculator() {
     const [timePeriod, setTimePeriod] = useState<number>(10); // in years
     const [expectedReturnRate, setExpectedReturnRate] = useState<number>(12); // in percentage
 
-    // Calculations for One-Time and Monthly Investment
     const investedAmount: number = selectedTab === "monthly"
         ? Array.from({ length: timePeriod }).reduce<number>(
-            (total: number, _, year: number) => {
-                const yearlyInvestment = monthlyInvestment * 12;
-                return total + yearlyInvestment;
-            },
+            (total) => total + monthlyInvestment * 12,
             0
         )
         : oneTimeInvestment;
 
     const futureValue: number = selectedTab === "monthly"
         ? Array.from({ length: timePeriod }).reduce<number>(
-            (total: number, _, year: number) => {
+            (total, _, yearIndex) => {
                 const yearlyInvestment = monthlyInvestment * 12;
-                const compoundedAmount = yearlyInvestment * Math.pow(1 + expectedReturnRate / 100, timePeriod - year);
+                const compoundedAmount = yearlyInvestment * Math.pow(1 + expectedReturnRate / 100, timePeriod - yearIndex);
                 return total + compoundedAmount;
             },
             0
@@ -61,8 +57,8 @@ export default function ELSSCalculator() {
             <Navbar />
             <div className="p-4 md:p-8 max-w-5xl mx-auto">
                 <h2 className="text-sm md:text-base text-gray-600 dark:text-gray-400">
-                    <Link href="/" className="hover:underline">Home </Link> &gt;
-                    <Link href="/tools" className="hover:underline">Tools </Link> &gt; ELSS Calculator
+                    <Link href="/" className="hover:underline">Home</Link> &gt;
+                    <Link href="/tools" className="hover:underline">Tools</Link> &gt; ELSS Calculator
                 </h2>
                 <h1 className="text-2xl md:text-3xl font-bold mt-4">ELSS Calculator</h1>
 
