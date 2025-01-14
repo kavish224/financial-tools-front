@@ -23,7 +23,6 @@ export const Navbar = () => {
     const { user, loading } = useAuth(); // Get user and loading state from useAuth
     const menuRef = useRef<HTMLDivElement>(null); // Ref for the menu container
     const buttonRef = useRef<HTMLButtonElement>(null); // Ref for the menu button
-    const pp = user?.photoURL
     const toggleMenu = () => {
         setIsOpen((prev) => !prev);
     };
