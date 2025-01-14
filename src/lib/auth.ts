@@ -7,7 +7,8 @@ import {
   signOut,
   fetchSignInMethodsForEmail,
   linkWithCredential,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  updateProfile,
 } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { auth } from "./firebase";
@@ -75,10 +76,11 @@ export const signInWithGoogle = async () => {
 };
 
 // Signup function
-export const signUp = async (email: string, password: string) => {
+export const signUp = async (email: string, password: string, name: string) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     await sendEmailVerification(userCredential.user);
+    await updateProfile(userCredential.user, { displayName: name });
     await signOut(auth); // Immediately log the user out to prevent auto-login
     return { message: "Please verify your email before logging in." };
   } catch (error: unknown) {
