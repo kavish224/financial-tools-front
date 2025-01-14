@@ -5,7 +5,12 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
-
+.no-focus-outline:focus {
+  outline: none;
+}
+.no-select {
+  user-select: none; /* Prevent text selection */
+}
 @layer base {
   :root {
     --background: 0 0% 100%;
