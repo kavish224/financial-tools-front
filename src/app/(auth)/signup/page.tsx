@@ -4,19 +4,26 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signUp, signInWithGoogle } from "@/lib/auth";
 import { useRouter } from "next/navigation";
+import { auth } from "@/lib/firebase";
 
 const Signup = () => {
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [gloading, setGLoading] = useState(false);
     const [message, setMessage] = useState("");
     const router = useRouter();
-
+    useEffect(() => {
+        if (auth.currentUser) {
+            router.push("/"); // Redirect to home if already logged in
+        }
+    }, [router]);
     const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();
         setError("");
@@ -29,9 +36,9 @@ const Signup = () => {
 
         try {
             setLoading(true);
-            const response = await signUp(email, password);
+            const response = await signUp(email, password, name);
             setMessage(response.message || "Signup successful! Please verify your email.");
-            router.push("/login");
+            router.push("/verify-email");
         } catch (err: unknown) {
             if (err instanceof Error) {
                 setError(err.message || "Failed to sign up. Please try again.");
@@ -45,6 +52,7 @@ const Signup = () => {
 
     const handleGoogleSignup = async () => {
         setError("");
+        setGLoading(true);
         try {
             const result = await signInWithGoogle();
             console.log("Google signup successful:", result.user);
@@ -56,6 +64,8 @@ const Signup = () => {
             } else {
                 setError("An unknown error occurred.");
             }
+        } finally {
+            setGLoading(false);
         }
     };
 
@@ -68,6 +78,16 @@ const Signup = () => {
                 <CardContent>
                     <form onSubmit={handleSignup}>
                         <div className="grid w-full items-center gap-4">
+                            <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="name">Name</Label>
+                                <Input
+                                    id="name"
+                                    type="text"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    required
+                                />
+                            </div>
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="email">Email</Label>
                                 <Input
@@ -112,7 +132,7 @@ const Signup = () => {
                         onClick={handleGoogleSignup}
                         className="w-full flex items-center justify-center gap-2 border border-gray-300 dark:hover:text-black rounded-md py-2 px-4 shadow-sm hover:bg-gray-100 transition disabled:opacity-50"
                         variant="outline"
-                        disabled={loading}
+                        disabled={gloading}
                         aria-live="polite"
                     >
                         <div className="flex items-center">
@@ -129,7 +149,7 @@ const Signup = () => {
                             </svg>
                         </div>
                         <span>
-                            {loading ? "Signing up with Google..." : "Continue with Google"}
+                            {gloading ? "Signing up with Google..." : "Continue with Google"}
                         </span>
                     </Button>
 
