@@ -15,6 +15,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [gloading, setGLoading] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -65,7 +66,7 @@ const Login = () => {
 
   const handleGoogleLogin = async () => {
     setError("");
-    setLoading(true);
+    setGLoading(true);
 
     try {
       await signInWithGoogle();
@@ -77,7 +78,7 @@ const Login = () => {
         setError("An unknown error occurred.");
       }
     } finally {
-      setLoading(false);
+      setGLoading(false);
     }
   };
 
@@ -136,7 +137,7 @@ const Login = () => {
             onClick={handleGoogleLogin}
             className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-md py-2 px-4 shadow-sm hover:bg-gray-100 dark:hover:text-black transition disabled:opacity-50"
             variant="outline"
-            disabled={loading}
+            disabled={gloading}
             aria-live="polite"
           >
             <div className="flex items-center">
@@ -153,7 +154,7 @@ const Login = () => {
               </svg>
             </div>
             <span>
-              {loading ? "Logging in with Google..." : "Continue with Google"}
+              {gloading ? "Logging in with Google..." : "Continue with Google"}
             </span>
           </Button>
         </CardContent>
