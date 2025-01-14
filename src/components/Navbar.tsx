@@ -18,6 +18,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Separator } from "./ui/separator";
 export const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
     const { user, loading } = useAuth(); // Get user and loading state from useAuth
@@ -140,15 +141,39 @@ export const Navbar = () => {
             {/* Mobile Menu */}
             <div
                 ref={menuRef}
-                className={`md:hidden ${isOpen ? "block" : "hidden"} mt-4`}
+                className={`md:hidden fixed top-0 left-0 h-full w-64 bg-white dark:bg-[#1c1d1f] shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${isOpen ? "translate-x-0" : "-translate-x-full"
+                    }`}
             >
-                <div className="flex flex-col items-center space-y-4">
-                    <Link href={"/"}>Home</Link>
-                    {/* <Link href={"/markets"}>Markets</Link> */}
-                    <Link href={"/analytics"}>Analytics</Link>
-                    <Link href={"/tools"}>Tools</Link>
-                    <Link href={"/aboutus"}>About Us</Link>
-                    <Link href={"/support"}>Support</Link>
+                <div className="flex flex-col items-start space-y-4 p-4">
+                <div className="flex items-center justify-center">
+                        <Button
+                            ref={buttonRef}
+                            className="rounded-full text-xl"
+                            onClick={toggleMenu}
+                            variant={"ghost"}
+                        >
+                            ☰
+                        </Button>
+                        <Link href={"/"} className="text-xl">
+                            Logo
+                        </Link>
+                    </div>
+                    <Separator />
+                    <Link href={"/"} className="text-lg" onClick={() => setIsOpen(false)}>
+                        Home
+                    </Link>
+                    <Link href={"/analytics"} className="text-lg" onClick={() => setIsOpen(false)}>
+                        Analytics
+                    </Link>
+                    <Link href={"/tools"} className="text-lg" onClick={() => setIsOpen(false)}>
+                        Tools
+                    </Link>
+                    <Link href={"/aboutus"} className="text-lg" onClick={() => setIsOpen(false)}>
+                        About Us
+                    </Link>
+                    <Link href={"/support"} className="text-lg" onClick={() => setIsOpen(false)}>
+                        Support
+                    </Link>
                 </div>
             </div>
         </nav>
