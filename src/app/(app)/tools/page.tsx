@@ -56,19 +56,19 @@ export default function ToolsPage() {
             title: "EMI",
             description: "Equated Monthly Installment calculator.",
             path: "/tools/emi",
-            image: "/images/tools/lumpsum.jpg",
+            image: "/images/tools/emi.jpeg",
         },
         {
             title: "CAGR",
             description: "Compound Annual Growth Rate calculator.",
             path: "/tools/cagr",
-            image: "/images/tools/lumpsum.jpg",
+            image: "/images/tools/cagr.jpg",
         },
         {
             title: "ELSS",
             description: "Equity Linked Savings Scheme calculator.",
             path: "/tools/elss",
-            image: "/images/tools/lumpsum.jpg",
+            image: "/images/tools/elss.jpg",
         },
     ];
 
