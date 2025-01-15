@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { useAuth } from "./AuthProvider";
@@ -21,12 +21,14 @@ import {
 import { Separator } from "./ui/separator";
 export const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const { user, loading } = useAuth(); // Get user and loading state from useAuth
-    const menuRef = useRef<HTMLDivElement>(null); // Ref for the menu container
-    const buttonRef = useRef<HTMLButtonElement>(null); // Ref for the menu button
-    const toggleMenu = () => {
+    const { user, loading } = useAuth();
+    const menuRef = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+
+    const toggleMenu = useCallback(() => {
         setIsOpen((prev) => !prev);
-    };
+    }, []);
+
     // Close menu if clicked outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -37,7 +39,7 @@ export const Navbar = () => {
                 buttonRef.current &&
                 !buttonRef.current.contains(target)
             ) {
-                setIsOpen(false); // Close the menu
+                setIsOpen(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
@@ -47,8 +49,9 @@ export const Navbar = () => {
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>; // Show loading state while checking auth status
+        return <div>Loading...</div>;
     }
+
     const AvatarMenu = () => (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -69,27 +72,24 @@ export const Navbar = () => {
                     Hi, {user?.displayName}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator className="my-1 border-[#D9D9D9] dark:border-[#b3b3b3]" />
-                <DropdownMenuItem
-                    className="p-2 hover:bg-[#D9D9D9] dark:hover:bg-[#b3b3b3] rounded-md cursor-pointer text-[#000000] dark:text-[#D9D9D9]"
-                >
+                <DropdownMenuItem className="p-2 hover:bg-[#D9D9D9] dark:hover:bg-[#b3b3b3] rounded-md cursor-pointer text-[#000000] dark:text-[#D9D9D9]">
                     Profile
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                    className="p-2 hover:bg-[#D9D9D9] dark:hover:bg-[#b3b3b3] rounded-md cursor-pointer text-[#000000] dark:text-[#D9D9D9]"
-                >
+                <DropdownMenuItem className="p-2 hover:bg-[#D9D9D9] dark:hover:bg-[#b3b3b3] rounded-md cursor-pointer text-[#000000] dark:text-[#D9D9D9]">
                     Billing
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                    className="p-2 hover:bg-[#D9D9D9] dark:hover:bg-[#b3b3b3] rounded-md cursor-pointer text-[#000000] dark:text-[#D9D9D9]"
-                >
+                <DropdownMenuItem className="p-2 hover:bg-[#D9D9D9] dark:hover:bg-[#b3b3b3] rounded-md cursor-pointer text-[#000000] dark:text-[#D9D9D9]">
                     Team
                 </DropdownMenuItem>
-                <DropdownMenuLabel className="p-2"> <LogoutButton /></DropdownMenuLabel>
+                <DropdownMenuLabel className="p-2">
+                    <LogoutButton />
+                </DropdownMenuLabel>
             </DropdownMenuContent>
         </DropdownMenu>
     );
+
     return (
-        <nav className="p-4 shadow-lg text-l dark:bg-[#1c1d1f]">
+        <nav className="p-4 shadow-lg text-l dark:bg-[#1c1d1f] relative">
             <div className="flex items-center justify-between">
                 {/* Links (hidden on mobile) */}
                 <div className="hidden md:flex items-center space-x-4">
@@ -123,9 +123,7 @@ export const Navbar = () => {
                         >
                             ☰
                         </Button>
-                        <Link href={"/"} className="text-xl">
-                            Logo
-                        </Link>
+                        <Link href={"/"} className="text-xl">Logo</Link>
                     </div>
                     <div className="flex space-x-4 items-center">
                         <ModeToggle />
@@ -138,14 +136,20 @@ export const Navbar = () => {
                 </div>
             </div>
 
-            {/* Mobile Menu */}
+            {/* Overlay and Mobile Menu */}
+            {isOpen && (
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"
+                    onClick={() => setIsOpen(false)}
+                />
+            )}
             <div
                 ref={menuRef}
                 className={`md:hidden fixed top-0 left-0 h-full w-64 bg-white dark:bg-[#1c1d1f] shadow-lg transform transition-transform duration-300 ease-in-out z-50 ${isOpen ? "translate-x-0" : "-translate-x-full"
                     }`}
             >
                 <div className="flex flex-col items-start space-y-4 p-4">
-                <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-center">
                         <Button
                             ref={buttonRef}
                             className="rounded-full text-xl"
