@@ -19,6 +19,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Camera, Mail, Phone, MapPin, Shield, Key, Edit } from 'lucide-react';
 import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/Navbar';
+import Link from 'next/link';
 
 interface UserData {
     displayName: string;
@@ -68,7 +69,7 @@ const ProfilePage: React.FC = () => {
 
                     <div className="mb-4">
                         <h2 className="text-sm md:text-base text-gray-600 dark:text-gray-400">
-                            <a href="/" className="hover:underline">Home</a> &gt; Profile
+                            <Link href="/" className="hover:underline">Home</Link> &gt; Profile
                         </h2>
                     </div>
 
