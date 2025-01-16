@@ -68,19 +68,13 @@ export const Navbar = () => {
             <DropdownMenuContent
                 className="w-56 rounded-lg border bg-[#ffffff] dark:bg-[#1c1d1f] shadow-lg p-2 text-sm"
             >
-                <DropdownMenuLabel className="font-bold text-[#000000] dark:text-[#D9D9D9]">
+                <DropdownMenuLabel className="font-bold text-[#000000] dark:text-white">
                     Hi, {user?.displayName}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator className="my-1 border-[#D9D9D9] dark:border-[#b3b3b3]" />
-                <DropdownMenuItem className="p-2 hover:bg-[#D9D9D9] dark:hover:bg-[#b3b3b3] rounded-md cursor-pointer text-[#000000] dark:text-[#D9D9D9]">
+                <Link href={"/profile"}><DropdownMenuItem className="p-2 hover:bg-[#D9D9D9] dark:hover:bg-[#b3b3b3] rounded-md cursor-pointer text-[#000000] dark:text-white">
                     Profile
-                </DropdownMenuItem>
-                <DropdownMenuItem className="p-2 hover:bg-[#D9D9D9] dark:hover:bg-[#b3b3b3] rounded-md cursor-pointer text-[#000000] dark:text-[#D9D9D9]">
-                    Billing
-                </DropdownMenuItem>
-                <DropdownMenuItem className="p-2 hover:bg-[#D9D9D9] dark:hover:bg-[#b3b3b3] rounded-md cursor-pointer text-[#000000] dark:text-[#D9D9D9]">
-                    Team
-                </DropdownMenuItem>
+                </DropdownMenuItem></Link>
                 <DropdownMenuLabel className="p-2">
                     <LogoutButton />
                 </DropdownMenuLabel>
