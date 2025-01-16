@@ -12,7 +12,6 @@ import {
   EmailAuthProvider,
   reauthenticateWithCredential,
   updatePassword,
-  getAuth,
 } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { auth } from "./firebase";
