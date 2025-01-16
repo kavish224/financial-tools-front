@@ -1,5 +1,5 @@
-"use client"
-import React, { useState } from 'react';
+'use client';
+import React, { useState, useEffect } from 'react';
 import {
     Card,
     CardContent,
@@ -16,47 +16,72 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Camera, Mail, Phone, MapPin, Shield, Key, Edit } from 'lucide-react';
+import { Camera, Mail, Shield, Key, Edit, BadgeCheck } from 'lucide-react';
 import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/Navbar';
 import Link from 'next/link';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { auth } from '@/lib/firebase';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useAuth } from '@/components/AuthProvider';
+import { getCurrentUserProfile, updateUserProfile } from '@/lib/auth';
 
 interface UserData {
     displayName: string;
     email: string;
-    phoneNumber: string;
-    address: string;
+    emailVerified: boolean,
+    photoURL: string,
+    createdAt: string,
+    lastLoginAt: string,
 }
 
 const ProfilePage: React.FC = () => {
     const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
     const [showAlert, setShowAlert] = useState<boolean>(false);
-    const [formData, setFormData] = useState<UserData>({
-        displayName: "John Doe",
-        email: "john@example.com",
-        phoneNumber: "+91 9876543210",
-        address: "123 Financial District, Mumbai"
-    });
+    const [error, setError] = useState<string | null>(null);
+    const { user } = useAuth();
+    const { register, handleSubmit, reset } = useForm<UserData>();
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+    useEffect(() => {
+        const fetchUserProfile = async () => {
+            try {
+                const userProfile = getCurrentUserProfile();
+                reset({
+                    displayName: userProfile.displayName,
+                    email: userProfile.email,
+                    photoURL: userProfile.photoURL,
+                    emailVerified: userProfile.emailVerified,
+                    createdAt: userProfile.createdAt,
+                    lastLoginAt: userProfile.lastLoginAt,
+                });
+            } catch (error) {
+                console.error("Error fetching profile:", error);
+            }
+        };
+        fetchUserProfile();
+    }, [reset]);
+
+    const onSubmit: SubmitHandler<UserData> = async (data) => {
+        const user = auth.currentUser;
+        if (user) {
+            try {
+                await updateUserProfile({
+                    displayName: data.displayName,
+                    photoURL: data.photoURL,
+                });
+                setShowAlert(true);
+                setError(null);
+                setTimeout(() => setShowAlert(false), 3000);
+                setIsDialogOpen(false);
+            } catch (error) {
+                console.error("Error updating profile:", error);
+                setError("Failed to update profile. Please try again.");
+            }
+        }
     };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsDialogOpen(false);
-        setShowAlert(true);
-        setTimeout(() => setShowAlert(false), 3000);
-    };
-
     return (
         <div className="flex flex-col min-h-screen">
             <Navbar />
-
             <main className="flex-grow">
                 <div className="max-w-5xl mx-auto p-4">
                     {showAlert && (
@@ -66,7 +91,11 @@ const ProfilePage: React.FC = () => {
                             </AlertDescription>
                         </Alert>
                     )}
-
+                    {error && (
+                        <Alert className="mb-4 bg-red-50 dark:bg-red-900">
+                            <AlertDescription>{error}</AlertDescription>
+                        </Alert>
+                    )}
                     <div className="mb-4">
                         <h2 className="text-sm md:text-base text-gray-600 dark:text-gray-400">
                             <Link href="/" className="hover:underline">Home</Link> &gt; Profile
@@ -83,13 +112,22 @@ const ProfilePage: React.FC = () => {
                                         size="icon"
                                         onClick={() => setIsDialogOpen(true)}
                                         className="absolute"
+                                        aria-label="Edit Profile"
                                     >
                                         <Edit className="h-5 w-5" />
                                     </Button>
                                 </div>
                                 <div className="relative w-32 h-32 mx-auto mb-4">
                                     <div className="w-full h-full rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-                                        <span className="text-4xl text-gray-500">{formData.displayName[0]}</span>
+                                        <Avatar className="cursor-pointer no-focus-outline no-select w-full h-full">
+                                            <AvatarImage
+                                                src={user?.photoURL || "https://github.com/k.png"}
+                                                alt="user avatar"
+                                            />
+                                            <AvatarFallback>
+                                                {user?.displayName?.charAt(0) || "U"}
+                                            </AvatarFallback>
+                                        </Avatar>
                                     </div>
                                     <Button
                                         variant="outline"
@@ -99,23 +137,24 @@ const ProfilePage: React.FC = () => {
                                         <Camera className="h-4 w-4" />
                                     </Button>
                                 </div>
-                                <CardTitle className="text-xl font-semibold">{formData.displayName}</CardTitle>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">Member since 2024</p>
+                                <CardTitle className="text-xl font-semibold">{user?.displayName}</CardTitle>
+                                <p className="text-sm text-gray-500 dark:text-gray-400">{user?.metadata?.creationTime}</p>
                             </CardHeader>
                             <CardContent>
                                 <div className="space-y-4 pt-4 border-t">
                                     <div className="flex items-center space-x-3">
                                         <Mail className="h-4 w-4 text-gray-500" />
-                                        <span className="text-sm">{formData.email}</span>
+                                        <span className="text-sm">{user?.email}</span>
+                                        <span>{user?.emailVerified ? (<div><BadgeCheck /></div>) : "email not verifie"}</span>
                                     </div>
-                                    <div className="flex items-center space-x-3">
+                                    {/* <div className="flex items-center space-x-3">
                                         <Phone className="h-4 w-4 text-gray-500" />
                                         <span className="text-sm">{formData.phoneNumber}</span>
-                                    </div>
-                                    <div className="flex items-center space-x-3">
+                                    </div> */}
+                                    {/* <div className="flex items-center space-x-3">
                                         <MapPin className="h-4 w-4 text-gray-500" />
                                         <span className="text-sm">{formData.address}</span>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </CardContent>
                         </Card>
@@ -126,18 +165,23 @@ const ProfilePage: React.FC = () => {
                                 <DialogHeader>
                                     <DialogTitle>Edit Profile</DialogTitle>
                                 </DialogHeader>
-                                <form onSubmit={handleSubmit} className="space-y-6 py-4">
+                                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 py-4">
                                     <div className="space-y-4">
                                         <div className="space-y-2">
                                             <Label htmlFor="displayName">Display Name</Label>
                                             <Input
                                                 id="displayName"
-                                                name="displayName"
-                                                value={formData.displayName}
-                                                onChange={handleInputChange}
+                                                {...register("displayName")}
                                             />
                                         </div>
-                                        <div className="space-y-2">
+                                        {/* <div className="space-y-2">
+                                            <Label htmlFor="photoURL">Photo URL</Label>
+                                            <Input
+                                                id="photoURL"
+                                                {...register("photoURL")}
+                                            />
+                                        </div> */}
+                                        {/* <div className="space-y-2">
                                             <Label htmlFor="email">Email</Label>
                                             <Input
                                                 id="email"
@@ -146,8 +190,8 @@ const ProfilePage: React.FC = () => {
                                                 value={formData.email}
                                                 disabled={true}
                                             />
-                                        </div>
-                                        <div className="space-y-2">
+                                        </div> */}
+                                        {/* <div className="space-y-2">
                                             <Label htmlFor="phoneNumber">Phone Number</Label>
                                             <Input
                                                 id="phoneNumber"
@@ -155,8 +199,8 @@ const ProfilePage: React.FC = () => {
                                                 value={formData.phoneNumber}
                                                 onChange={handleInputChange}
                                             />
-                                        </div>
-                                        <div className="space-y-2">
+                                        </div> */}
+                                        {/* <div className="space-y-2">
                                             <Label htmlFor="address">Address</Label>
                                             <Input
                                                 id="address"
@@ -164,7 +208,7 @@ const ProfilePage: React.FC = () => {
                                                 value={formData.address}
                                                 onChange={handleInputChange}
                                             />
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div className="flex justify-end space-x-2">
                                         <Button
@@ -184,7 +228,6 @@ const ProfilePage: React.FC = () => {
                                 </form>
                             </DialogContent>
                         </Dialog>
-
                         {/* Security Card */}
                         <Card className="bg-white dark:bg-[#1c1d1f]">
                             <CardHeader className="pb-6">
@@ -203,12 +246,11 @@ const ProfilePage: React.FC = () => {
                                             <Key className="h-5 w-5 text-gray-500" />
                                             <div>
                                                 <h3 className="font-medium">Password</h3>
-                                                <p className="text-sm text-gray-500">Last changed 3 months ago</p>
                                             </div>
                                         </div>
-                                        <Button variant="outline">Change</Button>
+                                        <Button>Change</Button>
                                     </div>
-                                    <div className="flex items-center justify-between p-4 border rounded-lg">
+                                    {/* <div className="flex items-center justify-between p-4 border rounded-lg">
                                         <div className="flex items-center space-x-3">
                                             <Shield className="h-5 w-5 text-gray-500" />
                                             <div>
@@ -216,18 +258,18 @@ const ProfilePage: React.FC = () => {
                                                 <p className="text-sm text-gray-500">Not enabled</p>
                                             </div>
                                         </div>
-                                        <Button variant="outline">Enable</Button>
-                                    </div>
+                                        <Button>Enable</Button>
+                                    </div> */}
                                 </div>
                             </CardContent>
                         </Card>
                     </div>
                 </div>
             </main>
-
             <Footer />
         </div>
     );
 };
 
 export default ProfilePage;
+
