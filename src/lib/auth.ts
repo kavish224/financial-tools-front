@@ -13,7 +13,6 @@ import {
 import { FirebaseError } from "firebase/app";
 import { auth } from "./firebase";
 
-// Utility function for Firebase error messages
 const getFirebaseErrorMessage = (error: FirebaseError) => {
   const errorMessages: Record<string, string> = {
     "auth/email-already-in-use": "Email is already in use.",
@@ -28,7 +27,6 @@ const getFirebaseErrorMessage = (error: FirebaseError) => {
   return errorMessages[error.code] || "An unknown error occurred.";
 };
 
-// Google Sign-In function with account linking
 export const signInWithGoogle = async () => {
   const provider = new GoogleAuthProvider();
   try {
@@ -39,27 +37,21 @@ export const signInWithGoogle = async () => {
   } catch (error: unknown) {
     if (error instanceof FirebaseError) {
       console.error("Firebase error:", error);
-
       if (error.code === "auth/account-exists-with-different-credential") {
         const email = error.customData?.email as string;
         const pendingCred = GoogleAuthProvider.credentialFromError(error);
-
         if (email && pendingCred) {
           const methods = await fetchSignInMethodsForEmail(auth, email);
-
           if (methods.includes("password")) {
             throw new Error(
               `An account exists with the email ${email}. Sign in using email/password to link your Google account.`
             );
           }
-
           const result = await signInWithPopup(auth, provider);
           await linkWithCredential(result.user, pendingCred);
-
           return { user: result.user, message: "Google account linked successfully!" };
         }
       }
-
       switch (error.code) {
         case "auth/popup-closed-by-user":
           throw new Error("Popup closed before completion. Please try again.");
@@ -69,19 +61,17 @@ export const signInWithGoogle = async () => {
           throw new Error(getFirebaseErrorMessage(error));
       }
     }
-
     console.error("Unknown Google login error:", error);
     throw new Error("An unknown error occurred during Google sign-in.");
   }
 };
 
-// Signup function
 export const signUp = async (email: string, password: string, name: string) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     await sendEmailVerification(userCredential.user);
     await updateProfile(userCredential.user, { displayName: name });
-    await signOut(auth); // Immediately log the user out to prevent auto-login
+    await signOut(auth);
     return { message: "Please verify your email before logging in." };
   } catch (error: unknown) {
     if (error instanceof FirebaseError) {
@@ -91,27 +81,22 @@ export const signUp = async (email: string, password: string, name: string) => {
   }
 };
 
-// SignIn function
 export const signIn = async (email: string, password: string) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-
     if (!userCredential.user.emailVerified) {
       const error = new Error("Please verify your email address before logging in.");
       error.name = "EmailNotVerifiedError"; // Custom error name
       throw error;
     }
-
     const idToken = await userCredential.user.getIdToken();
     return { user: userCredential.user, idToken };
   } catch (error: unknown) {
     console.error("Error during login:", error);
-
     if (error instanceof Error) {
       if (error.name === "EmailNotVerifiedError") {
-        throw new Error(error.message); // Custom email verification error
+        throw new Error(error.message);
       }
-
       if (error instanceof FirebaseError) {
         switch (error.code) {
           case "auth/invalid-credential":
@@ -131,13 +116,11 @@ export const signIn = async (email: string, password: string) => {
         }
       }
     }
-
     console.error("Unknown error:", error);
     throw new Error("An unknown error occurred while trying to log in.");
   }
 };
 
-// Logout function
 export const logout = async () => {
   try {
     await signOut(auth);
@@ -147,13 +130,9 @@ export const logout = async () => {
   }
 };
 
-// Password Reset function
 export const resetPassword = async (email: string) => {
   try {
-    // Step 1: Send password reset email
     await sendPasswordResetEmail(auth, email);
-
-    // Firebase does not explicitly indicate if the email is unregistered, so we provide a generic message
     return "If an account is associated with this email, you'll receive a password reset email. Please check your inbox and follow the instructions.";
   } catch (error: unknown) {
     console.error("Error sending password reset email:", error);
@@ -163,4 +142,43 @@ export const resetPassword = async (email: string) => {
     throw new Error("Failed to send password reset email.");
   }
 };
+
+export const getCurrentUserProfile = () => {
+  const user = auth.currentUser;
+  if (user) {
+    return {
+      email: user.email || "",
+      emailVerified: user.emailVerified,
+      displayName: user.displayName || "",
+      photoURL: user.photoURL || "",
+      phoneNumber: user.phoneNumber || "",
+      createdAt: user.metadata.creationTime || "",
+      lastLoginAt: user.metadata.lastSignInTime || "",
+    };
+  }
+  throw new Error("No authenticated user found.");
+};
+
+export const updateUserProfile = async (profile: {
+  displayName?: string;
+  photoURL?: string;
+}) => {
+  const user = auth.currentUser;
+  if (!user) {
+    throw new Error("No authenticated user found.");
+  }
+  try {
+    await updateProfile(user, {
+      displayName: profile.displayName,
+      photoURL: profile.photoURL,
+    });
+    return { message: "Profile updated successfully!" };
+  } catch (error: unknown) {
+    if (error instanceof FirebaseError) {
+      throw new Error(getFirebaseErrorMessage(error));
+    }
+    throw new Error("Failed to update profile.");
+  }
+};
+
 
