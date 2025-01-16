@@ -9,6 +9,10 @@ import {
   linkWithCredential,
   sendPasswordResetEmail,
   updateProfile,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updatePassword,
+  getAuth,
 } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { auth } from "./firebase";
@@ -178,6 +182,52 @@ export const updateUserProfile = async (profile: {
       throw new Error(getFirebaseErrorMessage(error));
     }
     throw new Error("Failed to update profile.");
+  }
+};
+
+export const changePassword = async (currentPassword: string, newPassword: string) => {
+  const user = auth.currentUser;
+  if (!user || !user.email) {
+    throw new Error("No authenticated user found. Please log in again.");
+  }
+  try {
+    const credential = EmailAuthProvider.credential(user.email, currentPassword);
+    await reauthenticateWithCredential(user, credential);
+    await updatePassword(user, newPassword);
+    return { message: "Password updated successfully!" };
+  } catch (error: unknown) {
+    console.error("Error changing password:", error);
+    if (error instanceof FirebaseError) {
+      switch (error.code) {
+        case "auth/invalid-credential":
+          throw new Error(
+            "The provided credentials are invalid. Please ensure your current password is correct and try again."
+          );
+        case "auth/weak-password":
+          throw new Error(
+            "The new password is too weak. Please choose a stronger password with at least 6 characters."
+          );
+        case "auth/wrong-password":
+          throw new Error(
+            "The current password you entered is incorrect. Please double-check and try again."
+          );
+        case "auth/requires-recent-login":
+          throw new Error(
+            "Your session has expired. Please log in again to change your password."
+          );
+        case "auth/too-many-requests":
+          throw new Error(
+            "Too many failed attempts. Your account is temporarily locked. Please try again later."
+          );
+        case "auth/network-request-failed":
+          throw new Error(
+            "A network error occurred. Please check your internet connection and try again."
+          );
+        default:
+          throw new Error(getFirebaseErrorMessage(error));
+      }
+    }
+    throw new Error("An unexpected error occurred. Please try again later.");
   }
 };
 
