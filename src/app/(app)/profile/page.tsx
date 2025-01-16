@@ -248,7 +248,7 @@ const ProfilePage: React.FC = () => {
                                                 <h3 className="font-medium">Password</h3>
                                             </div>
                                         </div>
-                                        <Button>Change</Button>
+                                        <Link href={"/change-password"}><Button>Change</Button></Link>
                                     </div>
                                     {/* <div className="flex items-center justify-between p-4 border rounded-lg">
                                         <div className="flex items-center space-x-3">
