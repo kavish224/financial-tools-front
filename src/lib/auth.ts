@@ -1,3 +1,4 @@
+import axios from "axios";
 import {
   GoogleAuthProvider,
   signInWithPopup,
@@ -15,6 +16,26 @@ import {
 } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
 import { auth } from "./firebase";
+
+const BACKEND_URL = "http://localhost:8000/api";
+
+const syncUserWithBackend = async (idToken: string) => {
+  try {
+    const response = await axios.post(
+      `${BACKEND_URL}/auth/sync`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error syncing user with backend:", error);
+    throw new Error("Failed to sync user with backend.");
+  }
+};
 
 const getFirebaseErrorMessage = (error: FirebaseError) => {
   const errorMessages: Record<string, string> = {
@@ -36,6 +57,7 @@ export const signInWithGoogle = async () => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
     const idToken = await user.getIdToken();
+    await syncUserWithBackend(idToken);
     return { user, idToken };
   } catch (error: unknown) {
     if (error instanceof FirebaseError) {
@@ -74,6 +96,8 @@ export const signUp = async (email: string, password: string, name: string) => {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
     await sendEmailVerification(userCredential.user);
     await updateProfile(userCredential.user, { displayName: name });
+    const idToken = await userCredential.user.getIdToken();
+    await syncUserWithBackend(idToken);
     await signOut(auth);
     return { message: "Please verify your email before logging in." };
   } catch (error: unknown) {
@@ -93,6 +117,7 @@ export const signIn = async (email: string, password: string) => {
       throw error;
     }
     const idToken = await userCredential.user.getIdToken();
+    await syncUserWithBackend(idToken);
     return { user: userCredential.user, idToken };
   } catch (error: unknown) {
     console.error("Error during login:", error);
