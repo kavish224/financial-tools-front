@@ -17,7 +17,7 @@ import {
 import { FirebaseError } from "firebase/app";
 import { auth } from "./firebase";
 
-const BACKEND_URL = "http://localhost:8000/api";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 const syncUserWithBackend = async (idToken: string) => {
   try {
