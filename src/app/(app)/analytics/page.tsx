@@ -1,6 +1,16 @@
 "use client";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import Link from "next/link";
+
 // Define the stock data type
 // interface Stockgolden {
 //     stock_name: string;
@@ -18,9 +28,57 @@ import { Navbar } from "@/components/Navbar";
 // }
 
 function Page() {
+    const cards = [
+        {
+            title: "Nifty 50 stocks",
+            btn: "All Nifty 50 stocks",
+            path: "/analytics/n-50"
+        },
+        {
+            title: "Simple Moving Average 50",
+            btn: "All stocks near Simple Moving Average 50",
+            path: "/analytics/sma/50"
+        },
+        {
+            title: "Simple Moving Average 200",
+            btn: "All stocks near Simple Moving Average 200",
+            path: "/analytics/sma/200"
+        }
+    ]
+    return (
+        <div>
+            <Navbar />
+            <div className="min-h-screen">
+                <div className="flex flex-col ">
+                    {
+                        cards.map((k, index)=>(
+                            <Card className="w-full max-w-sm m-4" key={index}>
+                                <CardHeader>
+                                    <CardTitle>{k.title}</CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                </CardContent>
+                                <CardFooter className="flex-col gap-2">
+                                    <Link href={k.path}>
+                                        <Button type="submit" className="w-full">
+                                        <p>{k.btn}</p>
+                                    </Button>
+                                    </Link>
+                                </CardFooter>
+                            </Card>
+                        ))
+                    }
+                </div>
+            </div>
+            <Footer />
+        </div>
+    )
+}
+export default Page;
+
     // const [stocksgolden] = useState<Stockgolden[]>([]);
     // const [stocks50sma] = useState<Stock50sma[]>([]);
-
+    
     // useEffect(() => {
     //     const fetchGoldenCross = async () => {
     //         try {
@@ -98,22 +156,3 @@ function Page() {
     //         <Footer />
     //     </div>
     // );
-    return (
-        <div>
-            <Navbar />
-            <div className="min-h-screen">
-                <div className="flex flex-col justify-center items-center pt-16">
-                    <p className="text-3xl">
-                        Analytics
-                    </p>
-                    <p className="text-xl pt-4">
-                       Coming Soon....
-                    </p>
-                </div>
-            </div>
-            <Footer />
-        </div>
-    )
-}
-
-export default Page;
