@@ -37,7 +37,7 @@ function Page() {
     return (
         <>
             <Navbar />
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 min-h-screen">
                 <h1 className="text-2xl sm:text-3xl font-semibold text-center mb-6">
                     Nifty 50 Stocks
                 </h1>
