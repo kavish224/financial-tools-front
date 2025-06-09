@@ -1,6 +1,6 @@
 "use client"
 
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { app } from "@/lib/firebase"
 interface ProtectedRouteProps {
@@ -17,7 +17,9 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-    const [user, setUser] = useState<any | null | undefined>(undefined);
+    const [user, setUser] = useState<User | null | undefined>(undefined);
+    console.log(user);
+    
     const pathname = usePathname();
     useEffect(() => {
         const auth = getAuth(app);

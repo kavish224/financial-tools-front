@@ -22,11 +22,11 @@ interface Stock {
 
 function Page() {
     const [stocks, setStocks] = useState<Stock[]>([]);
-    const auth = getAuth();
-    const user = auth.currentUser;
     useEffect(() => {
         async function fetchData() {
             try {
+                const auth = getAuth();
+                const user = auth.currentUser;
                 const token = await user?.getIdToken();
                 const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/data/n-50`,{
                     headers: {

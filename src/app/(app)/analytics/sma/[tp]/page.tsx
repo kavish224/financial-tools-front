@@ -15,7 +15,6 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { getAuth } from "firebase/auth";
-import { headers } from "next/headers";
 
 interface sma {
     symbol: string,
@@ -26,12 +25,12 @@ interface sma {
 function Page() {
     const [sma, setSma] = useState<sma[]>([]);
     const [loading, setLoading] = useState(true);
-    const auth = getAuth();
-    const user = auth.currentUser;
     const {tp} = useParams();
     useEffect(() => {
         const fetchdata = async () => {
             try {
+                const auth = getAuth();
+                const user = auth.currentUser;
                 const token = await user?.getIdToken();
                 const data = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/data/sma`,{tp},{
                     headers:{
