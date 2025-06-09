@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -17,20 +17,20 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [gloading, setGLoading] = useState(false);
   const router = useRouter();
-
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect") || "/";
   useEffect(() => {
     if (auth.currentUser) {
-      router.push("/"); // Redirect to home if already logged in
+      router.push("/");
     }
   }, [router]);
 
-  // Basic email and password validation
   const isValidEmail = (email: string) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
-  const isValidPassword = (password: string) => password.length >= 6; // Password should be at least 6 characters
+  const isValidPassword = (password: string) => password.length >= 6;
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(""); // Clear previous error
+    setError("");
     setLoading(true);
 
     if (!isValidEmail(email)) {
@@ -47,10 +47,9 @@ const Login = () => {
 
     try {
       await signIn(email, password);
-      router.push("/"); // Redirect to home upon successful login
+      router.replace(redirect);
     } catch (err) {
       if (err instanceof Error) {
-        // Handle specific error cases from Firebase
         if (err.name === "EmailNotVerifiedError") {
           setError("Please verify your email address before logging in.");
         } else {
@@ -70,7 +69,7 @@ const Login = () => {
 
     try {
       await signInWithGoogle();
-      router.push("/"); // Redirect to home page after Google login
+      router.replace(redirect);
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -169,7 +168,7 @@ const Login = () => {
       </Card>
       <p className="pt-4">
         New to x?{" "}
-        <Link href="/signup" className="underline">
+        <Link href={`/signup?redirect=${redirect}`} className="underline">
           Register
         </Link>
       </p>

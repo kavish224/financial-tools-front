@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useEffect, useState } from "react";
 import { signUp, signInWithGoogle } from "@/lib/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { auth } from "@/lib/firebase";
 
 const Signup = () => {
@@ -19,9 +19,11 @@ const Signup = () => {
     const [gloading, setGLoading] = useState(false);
     const [message, setMessage] = useState("");
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const redirectUrl = searchParams.get("redirect")||"/";
     useEffect(() => {
         if (auth.currentUser) {
-            router.push("/"); // Redirect to home if already logged in
+            router.push("/");
         }
     }, [router]);
     const handleSignup = async (e: React.FormEvent) => {
@@ -57,7 +59,7 @@ const Signup = () => {
             const result = await signInWithGoogle();
             console.log("Google signup successful:", result.user);
             setMessage("Google signup successful!");
-            router.push("/");
+            router.replace(redirectUrl);
         } catch (err: unknown) {
             if (err instanceof Error) {
                 setError("Failed to sign up with Google. Please try again.");
