@@ -18,8 +18,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     const [user, setUser] = useState<User | null | undefined>(undefined);
-    console.log(user);
-    
     const pathname = usePathname();
     useEffect(() => {
         const auth = getAuth(app);
