@@ -11,6 +11,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import axios from "axios";
+import { getAuth } from "firebase/auth";
 import { useEffect, useState } from "react";
 
 interface Stock {
@@ -21,11 +22,17 @@ interface Stock {
 
 function Page() {
     const [stocks, setStocks] = useState<Stock[]>([]);
-
+    const auth = getAuth();
+    const user = auth.currentUser;
     useEffect(() => {
         async function fetchData() {
             try {
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/data/n-50`);
+                const token = await user?.getIdToken();
+                const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/data/n-50`,{
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
                 setStocks(res.data);
             } catch (error) {
                 console.error("Error fetching stock data:", error);
