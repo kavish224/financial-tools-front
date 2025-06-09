@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import { useAuth } from "./AuthProvider";
-import LogoutButton from "./LogoutBtn"; // Import the LogoutButton component
+import LogoutButton from "./LogoutBtn";
 import { ModeToggle } from "./DarkModeBtn";
 import {
     Avatar,
@@ -29,7 +29,6 @@ export const Navbar = () => {
         setIsOpen((prev) => !prev);
     }, []);
 
-    // Close menu if clicked outside
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target as Node;
@@ -57,7 +56,7 @@ export const Navbar = () => {
             <DropdownMenuTrigger asChild>
                 <Avatar className="cursor-pointer no-focus-outline no-select">
                     <AvatarImage
-                        src={user?.photoURL || "https://github.com/k.png"}
+                        src={user?.photoURL||""}
                         alt="user avatar"
                     />
                     <AvatarFallback>
