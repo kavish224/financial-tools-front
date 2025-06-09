@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { signIn, signInWithGoogle } from "@/lib/auth";
 import { auth } from "@/lib/firebase";
 import Link from "next/link";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -20,10 +21,15 @@ const Login = () => {
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/";
   useEffect(() => {
-    if (auth.currentUser) {
-      router.push("/");
-    }
-  }, [router]);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.replace(redirect);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [router, redirect]);
+
 
   const isValidEmail = (email: string) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
   const isValidPassword = (password: string) => password.length >= 6;
@@ -47,7 +53,12 @@ const Login = () => {
 
     try {
       await signIn(email, password);
-      router.replace(redirect);
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        unsubscribe();
+        router.replace(redirect);
+      }
+    });
     } catch (err) {
       if (err instanceof Error) {
         if (err.name === "EmailNotVerifiedError") {
@@ -69,7 +80,12 @@ const Login = () => {
 
     try {
       await signInWithGoogle();
-      router.replace(redirect);
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          unsubscribe();
+          router.replace(redirect);
+        }
+      });
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
