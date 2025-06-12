@@ -58,6 +58,7 @@ export const Navbar = () => {
                     <AvatarImage
                         src={user?.photoURL||""}
                         alt="user avatar"
+                        referrerPolicy="no-referrer"
                     />
                     <AvatarFallback>
                         {user?.displayName?.charAt(0) || "U"}

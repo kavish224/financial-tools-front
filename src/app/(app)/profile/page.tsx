@@ -126,6 +126,7 @@ const ProfilePage: React.FC = () => {
                                                     <AvatarImage
                                                         src={user?.photoURL || "https://github.com/k.png"}
                                                         alt="user avatar"
+                                                        referrerPolicy="no-referrer"
                                                     />
                                                     <AvatarFallback>
                                                         {user?.displayName?.charAt(0) || "U"}
