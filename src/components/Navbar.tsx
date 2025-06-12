@@ -24,11 +24,13 @@ export const Navbar = () => {
     const { user, loading } = useAuth();
     const menuRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLButtonElement>(null);
-
+    const [hasMounted, setHasMounted] = useState(false);
     const toggleMenu = useCallback(() => {
         setIsOpen((prev) => !prev);
     }, []);
-
+    useEffect(() => {
+        setHasMounted(true); // 👈 Set true on client mount
+    }, []);
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target as Node;
@@ -46,7 +48,7 @@ export const Navbar = () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-
+    if (!hasMounted) return null; 
     if (loading) {
         return <div>Loading...</div>;
     }
