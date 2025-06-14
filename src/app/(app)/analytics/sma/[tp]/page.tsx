@@ -37,7 +37,7 @@ function Page() {
                         Authorization: `Bearer ${token}`
                     }
                 });
-                setSma(data.data);
+                setSma(data.data.data);
             } catch (error) {
                 console.error("error", error);
             } finally {
