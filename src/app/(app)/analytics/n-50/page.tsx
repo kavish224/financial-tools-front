@@ -1,4 +1,5 @@
-"use client"
+"use client";
+
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import {
@@ -20,26 +21,49 @@ interface Stock {
     industry: string;
 }
 
+type SortKey = keyof Stock;
+
 function Page() {
     const [stocks, setStocks] = useState<Stock[]>([]);
+    const [sortKey, setSortKey] = useState<SortKey | null>(null);
+    const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
+
     useEffect(() => {
         async function fetchData() {
             try {
                 const auth = getAuth();
                 const user = auth.currentUser;
                 const token = await user?.getIdToken();
-                const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/data/n-50`,{
+                const res = await axios.get(`${process.env.NEXT_PUBLIC_BACKEND_URL}/data/n-50`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
                 });
-                setStocks(res.data);
+                setStocks(res.data.data);
             } catch (error) {
                 console.error("Error fetching stock data:", error);
             }
         }
         fetchData();
     }, []);
+
+    function handleSort(key: SortKey) {
+        if (sortKey === key) {
+            setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+        } else {
+            setSortKey(key);
+            setSortOrder("asc");
+        }
+    }
+
+    const sortedStocks = [...stocks].sort((a, b) => {
+        if (!sortKey) return 0;
+        const valueA = a[sortKey].toUpperCase();
+        const valueB = b[sortKey].toUpperCase();
+        if (valueA < valueB) return sortOrder === "asc" ? -1 : 1;
+        if (valueA > valueB) return sortOrder === "asc" ? 1 : -1;
+        return 0;
+    });
 
     return (
         <>
@@ -51,18 +75,24 @@ function Page() {
                 <div className="overflow-x-auto">
                     <Table className="min-w-full">
                         <TableCaption className="text-sm text-gray-500 mt-2">
-                            A list of all the Nifty 50 stocks.
+                            A list of all the Nifty 200 stocks.
                         </TableCaption>
                         <TableHeader>
                             <TableRow>
                                 <TableHead className="w-[60px]">S.No.</TableHead>
-                                <TableHead>Symbol</TableHead>
-                                <TableHead>Company Name</TableHead>
-                                <TableHead>Industry</TableHead>
+                                <TableHead onClick={() => handleSort("symbol")} className="cursor-pointer">
+                                    Symbol {sortKey === "symbol" && (sortOrder === "asc" ? "↑" : "↓")}
+                                </TableHead>
+                                <TableHead onClick={() => handleSort("companyName")} className="cursor-pointer">
+                                    Company Name {sortKey === "companyName" && (sortOrder === "asc" ? "↑" : "↓")}
+                                </TableHead>
+                                <TableHead onClick={() => handleSort("industry")} className="cursor-pointer">
+                                    Industry {sortKey === "industry" && (sortOrder === "asc" ? "↑" : "↓")}
+                                </TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {stocks.map((s, index) => (
+                            {sortedStocks.map((s, index) => (
                                 <TableRow key={s.symbol || index}>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>{s.symbol}</TableCell>
