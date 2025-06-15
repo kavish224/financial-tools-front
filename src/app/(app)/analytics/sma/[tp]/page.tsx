@@ -90,7 +90,7 @@ function Page() {
             }
         };
         fetchData();
-    }, [selectedDate]);
+    }, [selectedDate, tp]);
 
     useEffect(() => {
         let data = [...sma];
