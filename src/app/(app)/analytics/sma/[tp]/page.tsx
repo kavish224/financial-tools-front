@@ -51,7 +51,8 @@ function Page() {
                     `${process.env.NEXT_PUBLIC_BACKEND_URL}/data/sma/dates`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
-                const cleaned = res.data.map((d: string) => new Date(d).toISOString().split("T")[0]);
+                const d = res.data.data;
+                const cleaned = d.map((d: string) => new Date(d).toISOString().split("T")[0]);
                 setDates(cleaned);
                 setSelectedDate(cleaned[0]);
             } catch (err) {
@@ -75,8 +76,9 @@ function Page() {
                     { tp, date: selectedDate },
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
-
-                const withMockHistory = res.data.map((d: SMA) => ({
+                console.log(res.data,"k");
+                
+                const withMockHistory = res.data?.data.map((d: SMA) => ({
                     ...d,
                     history: Array.from({ length: 10 }, () => Number(d.sma_value) * (0.95 + Math.random() * 0.1))
                 }));
