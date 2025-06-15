@@ -30,8 +30,8 @@ import Link from "next/link";
 function Page() {
     const cards = [
         {
-            title: "Nifty 50 stocks",
-            btn: "All Nifty 50 stocks",
+            title: "Nifty 200 stocks",
+            btn: "All Nifty 200 stocks",
             path: "/analytics/n-50"
         },
         {
