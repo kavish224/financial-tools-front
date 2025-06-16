@@ -1,5 +1,6 @@
 'use client';
 
+import { ResetPasswordForm } from '@/components/ResetPass';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -33,11 +34,6 @@ export default function AuthActionPage() {
       {actionComponent || <p>Loading...</p>}
     </div>
   );
-}
-
-// These are placeholders. Implement them as needed.
-function ResetPasswordForm({ oobCode }: { oobCode: string }) {
-  return <p>Render reset password form here for code: {oobCode}</p>;
 }
 
 function VerifyEmailHandler({ oobCode }: { oobCode: string }) {
