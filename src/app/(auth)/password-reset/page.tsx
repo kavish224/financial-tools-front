@@ -17,7 +17,7 @@ import {
 const PasswordReset = () => {
   const [email, setEmail] = useState("");
   const [statusMessage, setStatusMessage] = useState("");
-  const [statusType, setStatusType] = useState(""); // 'error' or 'success'
+  const [statusType, setStatusType] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handlePasswordReset = async (event: React.FormEvent) => {
@@ -30,7 +30,7 @@ const PasswordReset = () => {
       const message = await resetPassword(email);
       setStatusMessage(message);
       setStatusType("success");
-      setEmail(""); // Clear the email input after success
+      setEmail("");
     } catch (err) {
       if (err instanceof Error) {
         setStatusMessage(err.message);
