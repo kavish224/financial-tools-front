@@ -16,6 +16,8 @@ import {
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Navbar } from "./Navbar";
+import { Footer } from "./Footer";
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     const [user, setUser] = useState<User | null | undefined>(undefined);
     const pathname = usePathname();
@@ -32,22 +34,28 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
     if (!user) {
         const redirectUrl = encodeURIComponent(pathname);
         return (
-            <div className="min-h-screen flex justify-center items-center">
-                <Card className="w-full max-w-sm">
-                    <CardHeader>
-                        <CardTitle>Please Login to Continue</CardTitle>
-                    </CardHeader>
-                    <CardContent className="">
-                        <p className="pb-6">You must be logged in to access this page.</p>
-                    </CardContent>
-                    <CardFooter className="flex-col gap-2">
-                        <Link href={`/login?redirect=${redirectUrl}`}>
-                            <Button type="submit" className="w-full">
-                            Login
-                        </Button>
-                        </Link>
-                    </CardFooter>
-                </Card>
+            <div>
+                <nav>
+                    <Navbar />
+                </nav>
+                <div className="min-h-screen flex justify-center items-center">
+                    <Card className="w-full max-w-sm">
+                        <CardHeader>
+                            <CardTitle>Please Login to Continue</CardTitle>
+                        </CardHeader>
+                        <CardContent className="">
+                            <p className="pb-6">You must be logged in to access this page.</p>
+                        </CardContent>
+                        <CardFooter className="flex-col gap-2">
+                            <Link href={`/login?redirect=${redirectUrl}`}>
+                                <Button type="submit" className="w-full">
+                                    Login
+                                </Button>
+                            </Link>
+                        </CardFooter>
+                    </Card>
+                </div>
+                <Footer />
             </div>
         );
     }
