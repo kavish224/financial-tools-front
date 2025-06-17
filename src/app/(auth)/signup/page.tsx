@@ -203,8 +203,10 @@ const Signup = () => {
         setGLoading(true);
         
         try {
-            const result = await signInWithGoogle();
-
+            const result = await signInWithGoogle();    
+            if (!result.user) {
+                throw new Error("Google sign-in failed. Please try again.");
+            }
             setMessage("Account created successfully with Google!");
             
             setTimeout(() => {
