@@ -35,8 +35,8 @@ const Signup = () => {
         special: false
     });
     const [isClient, setIsClient] = useState(false);
-    const [touchedFields, setTouchedFields] = useState<{[key: string]: boolean}>({});
-    
+    const [touchedFields, setTouchedFields] = useState<{ [key: string]: boolean }>({});
+
     const router = useRouter();
     const searchParams = useSearchParams();
     const redirectUrl = searchParams.get("redirect") || "/";
@@ -60,7 +60,7 @@ const Signup = () => {
     const validateName = (name: string) => {
         const errors = [];
         const trimmedName = name.trim();
-        
+
         if (!trimmedName) {
             errors.push("Name is required");
         } else if (trimmedName.length < 2) {
@@ -70,7 +70,7 @@ const Signup = () => {
         } else if (!/^[a-zA-Z\s'-]+$/.test(trimmedName)) {
             errors.push("Name can only contain letters, spaces, hyphens, and apostrophes");
         }
-        
+
         return errors;
     };
 
@@ -89,7 +89,7 @@ const Signup = () => {
     const validatePassword = (password: string) => {
         const errors = [];
         const requirements = checkPasswordRequirements(password);
-        
+
         if (!password) {
             errors.push("Password is required");
         } else {
@@ -99,7 +99,7 @@ const Signup = () => {
             if (!requirements.number) errors.push("Password must contain at least one number");
             if (!requirements.special) errors.push("Password must contain at least one special character");
         }
-        
+
         return errors;
     };
 
@@ -110,35 +110,35 @@ const Signup = () => {
             password?: string;
             confirmPassword?: string;
         } = {};
-        
+
         const nameErrors = validateName(name);
         if (nameErrors.length > 0) {
             errors.name = nameErrors[0];
         }
-        
+
         if (!email.trim()) {
             errors.email = "Email is required";
         } else if (!isValidEmail(email)) {
             errors.email = "Please enter a valid email address";
         }
-        
+
         const passwordErrors = validatePassword(password);
         if (passwordErrors.length > 0) {
             errors.password = passwordErrors[0];
         }
-        
+
         if (!confirmPassword) {
             errors.confirmPassword = "Please confirm your password";
         } else if (password !== confirmPassword) {
             errors.confirmPassword = "Passwords do not match";
         }
-        
+
         setFieldErrors(errors);
         return Object.keys(errors).length === 0;
     };
 
     const handleFieldBlur = (fieldName: string) => {
-        setTouchedFields(prev => ({...prev, [fieldName]: true}));
+        setTouchedFields(prev => ({ ...prev, [fieldName]: true }));
     };
 
     const handleSignup = async (e: React.FormEvent) => {
@@ -161,7 +161,7 @@ const Signup = () => {
             setLoading(true);
             const response = await signUp(email.trim(), password, name.trim());
             setMessage(response.message || "Account created successfully! Please verify your email.");
-            
+
             setName("");
             setEmail("");
             setPassword("");
@@ -173,11 +173,11 @@ const Signup = () => {
                 number: false,
                 special: false
             });
-            
+
             setTimeout(() => {
                 router.push("/verify-email");
             }, 2000);
-            
+
         } catch (err: unknown) {
             if (err instanceof Error) {
                 if (err.message.includes("auth/email-already-in-use")) {
@@ -201,18 +201,18 @@ const Signup = () => {
         setError("");
         setMessage("");
         setGLoading(true);
-        
+
         try {
-            const result = await signInWithGoogle();    
+            const result = await signInWithGoogle();
             if (!result.user) {
                 throw new Error("Google sign-in failed. Please try again.");
             }
             setMessage("Account created successfully with Google!");
-            
+
             setTimeout(() => {
                 router.replace(redirectUrl);
             }, 1000);
-            
+
         } catch (err: unknown) {
             if (err instanceof Error) {
                 if (err.message.includes("popup-closed-by-user")) {
@@ -275,7 +275,7 @@ const Signup = () => {
                                     onChange={(e) => {
                                         setName(e.target.value);
                                         if (fieldErrors.name) {
-                                            setFieldErrors(prev => ({...prev, name: undefined}));
+                                            setFieldErrors(prev => ({ ...prev, name: undefined }));
                                         }
                                     }}
                                     onBlur={() => handleFieldBlur('name')}
@@ -310,7 +310,7 @@ const Signup = () => {
                                     onChange={(e) => {
                                         setEmail(e.target.value);
                                         if (fieldErrors.email) {
-                                            setFieldErrors(prev => ({...prev, email: undefined}));
+                                            setFieldErrors(prev => ({ ...prev, email: undefined }));
                                         }
                                     }}
                                     onBlur={() => handleFieldBlur('email')}
@@ -349,7 +349,7 @@ const Signup = () => {
                                             setPassword(e.target.value);
                                             checkPasswordRequirements(e.target.value);
                                             if (fieldErrors.password) {
-                                                setFieldErrors(prev => ({...prev, password: undefined}));
+                                                setFieldErrors(prev => ({ ...prev, password: undefined }));
                                             }
                                         }}
                                         onBlur={() => handleFieldBlur('password')}
@@ -406,7 +406,7 @@ const Signup = () => {
                                         onChange={(e) => {
                                             setConfirmPassword(e.target.value);
                                             if (fieldErrors.confirmPassword) {
-                                                setFieldErrors(prev => ({...prev, confirmPassword: undefined}));
+                                                setFieldErrors(prev => ({ ...prev, confirmPassword: undefined }));
                                             }
                                         }}
                                         onBlur={() => handleFieldBlur('confirmPassword')}
@@ -449,9 +449,9 @@ const Signup = () => {
                         </div>
 
                         <div className="flex flex-col pt-5 pb-5">
-                            <Button 
-                                type="submit" 
-                                className="w-full" 
+                            <Button
+                                type="submit"
+                                className="w-full"
                                 disabled={loading || gloading}
                                 aria-live="polite"
                                 aria-describedby="signup-status"
@@ -465,14 +465,14 @@ const Signup = () => {
                                     "Create Account"
                                 )}
                             </Button>
-                            
+
                             {error && (
                                 <div id="signup-status" className="flex items-center gap-1 text-red-500 text-sm pt-2" role="alert" aria-live="polite">
                                     <AlertCircle className="h-4 w-4" />
                                     {error}
                                 </div>
                             )}
-                            
+
                             {message && (
                                 <div className="flex items-center gap-1 text-green-600 dark:text-green-400 text-sm pt-2" role="alert" aria-live="polite">
                                     <CheckCircle className="h-4 w-4" />
@@ -519,8 +519,8 @@ const Signup = () => {
                 <CardFooter className="flex justify-center">
                     <p className="text-center text-sm">
                         Already have an account?{" "}
-                        <Link 
-                            href={`/login?redirect=${encodeURIComponent(redirectUrl)}`} 
+                        <Link
+                            href={`/login?redirect=${encodeURIComponent(redirectUrl)}`}
                             className="underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded"
                         >
                             Sign in
