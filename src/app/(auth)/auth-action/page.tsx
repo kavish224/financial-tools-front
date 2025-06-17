@@ -1,6 +1,8 @@
 'use client';
 
+import { RecoverEmailHandler } from '@/components/RecoverEmail';
 import { ResetPasswordForm } from '@/components/ResetPass';
+import { VerifyEmailHandler } from '@/components/VerifyEmail';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -33,12 +35,4 @@ export default function AuthActionPage() {
       {actionComponent || <p>Loading...</p>}
     </div>
   );
-}
-
-function VerifyEmailHandler({ oobCode }: { oobCode: string }) {
-  return <p>Verifying email with code: {oobCode}</p>;
-}
-
-function RecoverEmailHandler({ oobCode }: { oobCode: string }) {
-  return <p>Recovering email for code: {oobCode}</p>;
 }
