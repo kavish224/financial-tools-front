@@ -18,12 +18,12 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [gloading, setGLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [fieldErrors, setFieldErrors] = useState<{email?: string; password?: string}>({});
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
   const [isClient, setIsClient] = useState(false);
   const [attemptCount, setAttemptCount] = useState(0);
   const [isBlocked, setIsBlocked] = useState(false);
   const [blockTimeRemaining, setBlockTimeRemaining] = useState(0);
-  
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams.get("redirect") || "/";
@@ -40,18 +40,18 @@ const Login = () => {
     }
     const storedAttempts = localStorage.getItem('login_attempts');
     const storedBlockTime = localStorage.getItem('login_block_time');
-    
+
     if (storedAttempts) {
       setAttemptCount(parseInt(storedAttempts));
     }
-    
+
     if (storedBlockTime) {
       const blockTime = parseInt(storedBlockTime);
       const now = Date.now();
       if (now < blockTime) {
         setIsBlocked(true);
         setBlockTimeRemaining(Math.ceil((blockTime - now) / 1000));
-        
+
         const timer = setInterval(() => {
           const remaining = Math.ceil((blockTime - Date.now()) / 1000);
           if (remaining <= 0) {
@@ -64,7 +64,7 @@ const Login = () => {
             setBlockTimeRemaining(remaining);
           }
         }, 1000);
-        
+
         return () => clearInterval(timer);
       } else {
         setAttemptCount(0);
@@ -98,14 +98,14 @@ const Login = () => {
   };
 
   const validateForm = () => {
-    const errors: {email?: string; password?: string} = {};
-    
+    const errors: { email?: string; password?: string } = {};
+
     if (!email.trim()) {
       errors.email = "Email is required";
     } else if (!isValidEmail(email)) {
       errors.email = "Please enter a valid email address";
     }
-    
+
     if (!password) {
       errors.password = "Password is required";
     } else {
@@ -114,7 +114,7 @@ const Login = () => {
         errors.password = passwordErrors[0];
       }
     }
-    
+
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -123,13 +123,13 @@ const Login = () => {
     const newAttemptCount = attemptCount + 1;
     setAttemptCount(newAttemptCount);
     localStorage.setItem('login_attempts', newAttemptCount.toString());
-    
+
     if (newAttemptCount >= MAX_ATTEMPTS) {
       const blockUntil = Date.now() + BLOCK_DURATION;
       localStorage.setItem('login_block_time', blockUntil.toString());
       setIsBlocked(true);
       setBlockTimeRemaining(Math.ceil(BLOCK_DURATION / 1000));
-      
+
       const timer = setInterval(() => {
         const remaining = Math.ceil((blockUntil - Date.now()) / 1000);
         if (remaining <= 0) {
@@ -147,19 +147,19 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (isBlocked) {
       setError(`Too many failed attempts. Please wait ${Math.ceil(blockTimeRemaining / 60)} minutes before trying again.`);
       return;
     }
-    
+
     setError("");
     setFieldErrors({});
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     setLoading(true);
 
     try {
@@ -167,7 +167,7 @@ const Login = () => {
       setAttemptCount(0);
       localStorage.removeItem('login_attempts');
       localStorage.removeItem('login_block_time');
-      
+
       const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
           unsubscribe();
@@ -176,7 +176,7 @@ const Login = () => {
       });
     } catch (err) {
       handleRateLimit();
-      
+
       if (err instanceof Error) {
         if (err.name === "EmailNotVerifiedError") {
           setError("Please verify your email address before logging in.");
@@ -194,7 +194,7 @@ const Login = () => {
       } else {
         setError("An unexpected error occurred. Please try again.");
       }
-      
+
       if (err instanceof Error && err.message.includes("email")) {
         emailInputRef.current?.focus();
       } else {
@@ -210,7 +210,7 @@ const Login = () => {
       setError(`Too many failed attempts. Please wait ${Math.ceil(blockTimeRemaining / 60)} minutes before trying again.`);
       return;
     }
-    
+
     setError("");
     setGLoading(true);
 
@@ -219,7 +219,7 @@ const Login = () => {
       setAttemptCount(0);
       localStorage.removeItem('login_attempts');
       localStorage.removeItem('login_block_time');
-      
+
       const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
           unsubscribe();
@@ -228,7 +228,7 @@ const Login = () => {
       });
     } catch (err) {
       handleRateLimit();
-      
+
       if (err instanceof Error) {
         if (err.message.includes("popup-closed-by-user")) {
           setError("Google sign-in was cancelled.");
@@ -287,7 +287,7 @@ const Login = () => {
                   onChange={(e) => {
                     setEmail(e.target.value);
                     if (fieldErrors.email) {
-                      setFieldErrors(prev => ({...prev, email: undefined}));
+                      setFieldErrors(prev => ({ ...prev, email: undefined }));
                     }
                   }}
                   required
@@ -311,7 +311,7 @@ const Login = () => {
                   </div>
                 )}
               </div>
-              
+
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="password">
                   Password <span aria-label="required"></span>
@@ -325,7 +325,7 @@ const Login = () => {
                     onChange={(e) => {
                       setPassword(e.target.value);
                       if (fieldErrors.password) {
-                        setFieldErrors(prev => ({...prev, password: undefined}));
+                        setFieldErrors(prev => ({ ...prev, password: undefined }));
                       }
                     }}
                     required
@@ -359,7 +359,7 @@ const Login = () => {
                 )}
               </div>
             </div>
-            
+
             {isBlocked && (
               <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
                 <div className="flex items-center gap-2 text-red-700 dark:text-red-400 text-sm">
@@ -368,7 +368,7 @@ const Login = () => {
                 </div>
               </div>
             )}
-            
+
             <div className="flex flex-col pt-5 pb-5">
               <Button
                 type="submit"
@@ -386,14 +386,14 @@ const Login = () => {
                   "Login"
                 )}
               </Button>
-              
+
               {error && (
                 <div id="login-status" className="flex items-center gap-1 text-red-500 text-sm pt-2" role="alert" aria-live="polite">
                   <AlertCircle className="h-4 w-4" />
                   {error}
                 </div>
               )}
-              
+
               {attemptCount > 0 && attemptCount < MAX_ATTEMPTS && !isBlocked && (
                 <div className="text-amber-600 dark:text-amber-400 text-sm pt-2">
                   Warning: {MAX_ATTEMPTS - attemptCount} attempts remaining
@@ -439,8 +439,8 @@ const Login = () => {
         <CardFooter className="flex flex-col space-y-2">
           <p className="text-center text-sm">
             Forgot your password?{" "}
-            <Link 
-              href="/password-reset" 
+            <Link
+              href="/password-reset"
               className="underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded"
             >
               Reset it here
@@ -450,8 +450,8 @@ const Login = () => {
       </Card>
       <p className="pt-4 text-center text-sm">
         New to the platform?{" "}
-        <Link 
-          href={`/signup?redirect=${encodeURIComponent(redirect)}`} 
+        <Link
+          href={`/signup?redirect=${encodeURIComponent(redirect)}`}
           className="underline hover:no-underline focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded"
         >
           Create an account
