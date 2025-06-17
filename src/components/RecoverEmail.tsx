@@ -3,8 +3,6 @@
 import { useEffect, useState } from 'react';
 import { checkActionCode, applyActionCode } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -12,7 +10,7 @@ import Link from 'next/link';
 export function RecoverEmailHandler({ oobCode }: { oobCode: string }) {
     const [status, setStatus] = useState<'pending' | 'success' | 'error'>('pending');
     const [message, setMessage] = useState('');
-    const [restoredEmail, setRestoredEmail] = useState<string | null>(null);
+    const [, setRestoredEmail] = useState<string | null>(null);
 
     useEffect(() => {
         const recoverEmail = async () => {
