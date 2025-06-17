@@ -29,8 +29,7 @@ export default function AuthActionPage() {
   }, [mode, oobCode]);
 
   return (
-    <div className="p-8">
-      <h1 className="text-xl font-semibold mb-4">Account Action</h1>
+    <div>
       {actionComponent || <p>Loading...</p>}
     </div>
   );
