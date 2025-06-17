@@ -8,8 +8,6 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
-import { Navbar } from '@/components/Navbar';
-import { Footer } from '@/components/Footer';
 
 export function ResetPasswordForm({ oobCode }: { oobCode: string }) {
   const [password, setPassword] = useState('');
@@ -54,10 +52,8 @@ export function ResetPasswordForm({ oobCode }: { oobCode: string }) {
 
   return (
     <div>
-      <nav>
-        <Navbar />
-      </nav>
       <div className="reset-password-container flex flex-col justify-center items-center h-screen">
+        <h1 className="text-2xl font-bold mb-4">Tools</h1>
         <Card className="w-[350px]">
           <CardHeader>
             <CardTitle>Reset Password</CardTitle>
@@ -114,7 +110,6 @@ export function ResetPasswordForm({ oobCode }: { oobCode: string }) {
           </CardFooter>
         </Card>
       </div>
-      <Footer />
     </div>
   );
 }
