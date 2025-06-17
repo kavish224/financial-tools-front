@@ -76,7 +76,6 @@ function Page() {
                     { tp, date: selectedDate },
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
-                console.log(res.data,"k");
                 
                 const withMockHistory = res.data?.data.map((d: SMA) => ({
                     ...d,

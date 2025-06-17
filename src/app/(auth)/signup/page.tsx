@@ -204,7 +204,7 @@ const Signup = () => {
         
         try {
             const result = await signInWithGoogle();
-            console.log("Google signup successful:", result.user);
+
             setMessage("Account created successfully with Google!");
             
             setTimeout(() => {
