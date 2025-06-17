@@ -103,8 +103,8 @@ export function ResetPasswordForm({ oobCode }: { oobCode: string }) {
           </CardContent>
           <CardFooter className="flex justify-center">
             <p className="text-center">
-              <Link href="/" className="underline">
-                Back to Home
+              <Link href="/login" className="underline">
+                Back to Login
               </Link>
             </p>
           </CardFooter>

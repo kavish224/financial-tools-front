@@ -50,8 +50,8 @@ export function VerifyEmailHandler({ oobCode }: { oobCode: string }) {
           </CardContent>
           <CardFooter className="flex justify-center">
             {status !== 'pending' && (
-              <Link href="/" className="underline">
-                <Button variant="link">Back to Home</Button>
+              <Link href="/login" className="underline">
+                <Button variant="link">Back to Login</Button>
               </Link>
             )}
           </CardFooter>
