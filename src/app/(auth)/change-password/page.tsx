@@ -12,25 +12,25 @@ import { Footer } from "@/components/Footer";
 import { changePassword } from "@/lib/auth";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { 
-  AlertCircle, 
-  CheckCircle, 
-  Eye, 
-  EyeOff,  
-  ArrowLeft,
-  Check,
-  X
+import {
+    AlertCircle,
+    CheckCircle,
+    Eye,
+    EyeOff,
+    ArrowLeft,
+    Check,
+    X
 } from "lucide-react";
 
 interface PasswordStrength {
-  score: number;
-  checks: {
-    length: boolean;
-    uppercase: boolean;
-    lowercase: boolean;
-    number: boolean;
-    special: boolean;
-  };
+    score: number;
+    checks: {
+        length: boolean;
+        uppercase: boolean;
+        lowercase: boolean;
+        number: boolean;
+        special: boolean;
+    };
 }
 
 const ChangePassword = () => {
@@ -244,11 +244,10 @@ const ChangePassword = () => {
                                     <div className="space-y-2">
                                         <div className="flex items-center justify-between">
                                             <span className="text-xs text-gray-600">Password strength:</span>
-                                            <span className={`text-xs font-medium ${
-                                                passwordStrength.score <= 2 ? 'text-red-600' :
-                                                passwordStrength.score <= 3 ? 'text-yellow-600' :
-                                                passwordStrength.score <= 4 ? 'text-blue-600' : 'text-green-600'
-                                            }`}>
+                                            <span className={`text-xs font-medium ${passwordStrength.score <= 2 ? 'text-red-600' :
+                                                    passwordStrength.score <= 3 ? 'text-yellow-600' :
+                                                        passwordStrength.score <= 4 ? 'text-blue-600' : 'text-green-600'
+                                                }`}>
                                                 {getPasswordStrengthText(passwordStrength.score)}
                                             </span>
                                         </div>
@@ -292,11 +291,10 @@ const ChangePassword = () => {
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
                                         onBlur={() => handleFieldBlur('confirmPassword')}
-                                        className={`pr-10 ${
-                                            fieldsValidated.confirmPassword && confirmPassword && newPassword && confirmPassword !== newPassword
+                                        className={`pr-10 ${fieldsValidated.confirmPassword && confirmPassword && newPassword && confirmPassword !== newPassword
                                                 ? "border-red-300 focus:border-red-500 focus:ring-red-500"
                                                 : ""
-                                        }`}
+                                            }`}
                                         required
                                         disabled={loading}
                                         autoComplete="new-password"
@@ -332,9 +330,9 @@ const ChangePassword = () => {
                                     </div>
                                 </div>
                             )}
-                            <Button 
-                                type="submit" 
-                                className="w-full" 
+                            <Button
+                                type="submit"
+                                className="w-full"
                                 disabled={loading || !currentPassword || !newPassword || !confirmPassword || passwordStrength.score < 3 || newPassword !== confirmPassword}
                             >
                                 {loading ? "Changing Password..." : "Change Password"}

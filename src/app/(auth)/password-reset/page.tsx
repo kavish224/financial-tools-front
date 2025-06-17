@@ -16,7 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { AlertCircle, CheckCircle, KeyRound, ArrowLeft, Mail } from "lucide-react";
+import { AlertCircle, CheckCircle, ArrowLeft } from "lucide-react";
 
 const PasswordReset = () => {
   const [email, setEmail] = useState("");
@@ -122,8 +122,8 @@ const PasswordReset = () => {
                   onChange={handleEmailChange}
                   onBlur={() => setEmailTouched(true)}
                   className={` ${emailTouched && email && !isEmailValid
-                      ? "border-red-300 focus:border-red-500 focus:ring-red-500"
-                      : ""
+                    ? "border-red-300 focus:border-red-500 focus:ring-red-500"
+                    : ""
                     }`}
                   required
                   disabled={loading}
@@ -138,7 +138,6 @@ const PasswordReset = () => {
                 </p>
               )}
             </div>
-
             <Button
               type="submit"
               className="w-full"
@@ -147,7 +146,6 @@ const PasswordReset = () => {
               {loading ? "Sending Reset Link..." : "Send Reset Link"}
             </Button>
           </form>
-
           <div className="mt-4">
             <Link href="/login">
               <Button variant="outline" className="w-full">
@@ -160,8 +158,8 @@ const PasswordReset = () => {
         <CardFooter>
           {statusMessage && (
             <div className={`w-full flex items-start gap-2 p-3 rounded-md ${statusType === "error"
-                ? "bg-red-50 border border-red-200"
-                : "bg-green-50 border border-green-200"
+              ? "bg-red-50 border border-red-200"
+              : "bg-green-50 border border-green-200"
               }`}>
               {statusType === "error" ? (
                 <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
