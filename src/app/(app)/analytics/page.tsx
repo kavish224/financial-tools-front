@@ -4,7 +4,6 @@ import { Navbar } from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import {
     Card,
-    CardContent,
     CardFooter,
     CardHeader,
     CardTitle,
@@ -51,8 +50,7 @@ const DASHBOARD_CARDS: readonly DashboardCard[] = [
 ] as const;
 
 const DashboardCard = memo<{ card: DashboardCard }>(({ card }) => {
-    const Icon = card.icon;
-
+    // const Icon = card.icon;
     return (
         <Card
             className="w-full max-w-sm m-4 shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-2xl"

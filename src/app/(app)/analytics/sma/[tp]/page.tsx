@@ -32,8 +32,6 @@ interface ErrorState {
     message: string;
     type: 'network' | 'auth' | 'server' | 'unknown';
 }
-
-const PROXIMITY_THRESHOLD = 0.25;
 const DEBOUNCE_DELAY = 300;
 
 const useDebounce = (value: string, delay: number) => {
@@ -83,7 +81,6 @@ function Page() {
         key: null,
         order: "asc"
     });
-    const [sortAsc, setSortAsc] = useState(true);
     const [error, setError] = useState<ErrorState | null>(null);
     const [, setRetryCount] = useState(0);
 
@@ -304,7 +301,7 @@ function Page() {
         }
 
         setFiltered(data);
-    }, [debouncedSearch, sortConfig, sortAsc, sma]);
+    }, [debouncedSearch, sortConfig, sma]);
 
     const toggleSort = useCallback((field: keyof SMA) => {
         setSortConfig(prev => ({
@@ -544,9 +541,6 @@ function Page() {
                                     </TableRow>
                                 ) : (
                                     filtered.map((item, index) => {
-                                        const deviation = Number(item.deviation_pct);
-                                        const nearSMA = Math.abs(deviation) <= PROXIMITY_THRESHOLD;
-
                                         return (
                                             <TableRow
                                                 key={`${item.symbol}-${index}`}
