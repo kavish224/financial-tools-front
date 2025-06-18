@@ -19,9 +19,6 @@ const Login = () => {
   const [gloading, setGLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
-  const [isClient, setIsClient] = useState(false);
-  const [isBlocked, setIsBlocked] = useState(false);
-  const [blockTimeRemaining, setBlockTimeRemaining] = useState(0);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -164,20 +161,6 @@ const Login = () => {
     }
   };
 
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
-  };
-
-  if (!isClient) {
-    return (
-      <div className="login-container flex flex-col justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-      </div>
-    );
-  }
-
   return (
     <div className="login-container flex flex-col justify-center items-center min-h-screen p-4">
       <Card className="w-full max-w-[350px]">
@@ -211,7 +194,7 @@ const Login = () => {
                   aria-describedby={fieldErrors.email ? "email-error" : "email-helper"}
                   aria-invalid={!!fieldErrors.email}
                   className={fieldErrors.email ? "border-red-500 focus:border-red-500" : ""}
-                  disabled={loading || gloading || isBlocked}
+                  disabled={loading || gloading}
                 />
                 <div id="email-helper" className="sr-only">
                   Please enter your email address to sign in
@@ -246,7 +229,7 @@ const Login = () => {
                     aria-describedby={fieldErrors.password ? "password-error" : "password-helper"}
                     aria-invalid={!!fieldErrors.password}
                     className={`pr-10 ${fieldErrors.password ? "border-red-500 focus:border-red-500" : ""}`}
-                    disabled={loading || gloading || isBlocked}
+                    disabled={loading || gloading}
                   />
                   <button
                     type="button"
@@ -255,7 +238,7 @@ const Login = () => {
                     className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded"
                     aria-label={showPassword ? "Hide password" : "Show password"}
                     tabIndex={0}
-                    disabled={loading || gloading || isBlocked}
+                    disabled={loading || gloading}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
@@ -276,7 +259,7 @@ const Login = () => {
               <Button
                 type="submit"
                 className="w-full"
-                disabled={loading || gloading || isBlocked}
+                disabled={loading || gloading}
                 aria-live="polite"
                 aria-describedby="login-status"
               >
@@ -305,7 +288,7 @@ const Login = () => {
             onClick={handleGoogleLogin}
             className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-md py-2 px-4 shadow-sm hover:bg-gray-100 dark:hover:text-black transition disabled:opacity-50"
             variant="outline"
-            disabled={loading || gloading || isBlocked}
+            disabled={loading || gloading}
             aria-live="polite"
           >
             <div className="flex items-center">
