@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.1.1",
     "@nivo/treemap": "^0.87.0",
     "@radix-ui/react-accordion": "^1.2.2",
     "@radix-ui/react-avatar": "^1.1.2",
@@ -47,7 +48,8 @@
     "rimraf": "^6.0.1",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
-    "tanstack": "^1.0.0"
+    "tanstack": "^1.0.0",
+    "zod": "^3.25.67"
   },
   "devDependencies": {
     "@types/chart.js": "^2.9.41",
