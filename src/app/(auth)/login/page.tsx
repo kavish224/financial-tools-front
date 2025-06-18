@@ -20,7 +20,6 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({});
   const [isClient, setIsClient] = useState(false);
-  const [attemptCount, setAttemptCount] = useState(0);
   const [isBlocked, setIsBlocked] = useState(false);
   const [blockTimeRemaining, setBlockTimeRemaining] = useState(0);
 
@@ -30,49 +29,6 @@ const Login = () => {
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
 
-  const MAX_ATTEMPTS = 5;
-  const BLOCK_DURATION = 5 * 60 * 1000;
-
-  useEffect(() => {
-    setIsClient(true);
-    if (emailInputRef.current) {
-      emailInputRef.current.focus();
-    }
-    const storedAttempts = localStorage.getItem('login_attempts');
-    const storedBlockTime = localStorage.getItem('login_block_time');
-
-    if (storedAttempts) {
-      setAttemptCount(parseInt(storedAttempts));
-    }
-
-    if (storedBlockTime) {
-      const blockTime = parseInt(storedBlockTime);
-      const now = Date.now();
-      if (now < blockTime) {
-        setIsBlocked(true);
-        setBlockTimeRemaining(Math.ceil((blockTime - now) / 1000));
-
-        const timer = setInterval(() => {
-          const remaining = Math.ceil((blockTime - Date.now()) / 1000);
-          if (remaining <= 0) {
-            setIsBlocked(false);
-            setAttemptCount(0);
-            localStorage.removeItem('login_attempts');
-            localStorage.removeItem('login_block_time');
-            clearInterval(timer);
-          } else {
-            setBlockTimeRemaining(remaining);
-          }
-        }, 1000);
-
-        return () => clearInterval(timer);
-      } else {
-        setAttemptCount(0);
-        localStorage.removeItem('login_attempts');
-        localStorage.removeItem('login_block_time');
-      }
-    }
-  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -119,39 +75,8 @@ const Login = () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleRateLimit = () => {
-    const newAttemptCount = attemptCount + 1;
-    setAttemptCount(newAttemptCount);
-    localStorage.setItem('login_attempts', newAttemptCount.toString());
-
-    if (newAttemptCount >= MAX_ATTEMPTS) {
-      const blockUntil = Date.now() + BLOCK_DURATION;
-      localStorage.setItem('login_block_time', blockUntil.toString());
-      setIsBlocked(true);
-      setBlockTimeRemaining(Math.ceil(BLOCK_DURATION / 1000));
-
-      const timer = setInterval(() => {
-        const remaining = Math.ceil((blockUntil - Date.now()) / 1000);
-        if (remaining <= 0) {
-          setIsBlocked(false);
-          setAttemptCount(0);
-          localStorage.removeItem('login_attempts');
-          localStorage.removeItem('login_block_time');
-          clearInterval(timer);
-        } else {
-          setBlockTimeRemaining(remaining);
-        }
-      }, 1000);
-    }
-  };
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (isBlocked) {
-      setError(`Too many failed attempts. Please wait ${Math.ceil(blockTimeRemaining / 60)} minutes before trying again.`);
-      return;
-    }
 
     setError("");
     setFieldErrors({});
@@ -164,9 +89,6 @@ const Login = () => {
 
     try {
       await signIn(email.trim(), password);
-      setAttemptCount(0);
-      localStorage.removeItem('login_attempts');
-      localStorage.removeItem('login_block_time');
 
       const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -175,7 +97,6 @@ const Login = () => {
         }
       });
     } catch (err) {
-      handleRateLimit();
 
       if (err instanceof Error) {
         if (err.name === "EmailNotVerifiedError") {
@@ -206,19 +127,11 @@ const Login = () => {
   };
 
   const handleGoogleLogin = async () => {
-    if (isBlocked) {
-      setError(`Too many failed attempts. Please wait ${Math.ceil(blockTimeRemaining / 60)} minutes before trying again.`);
-      return;
-    }
-
     setError("");
     setGLoading(true);
 
     try {
       await signInWithGoogle();
-      setAttemptCount(0);
-      localStorage.removeItem('login_attempts');
-      localStorage.removeItem('login_block_time');
 
       const unsubscribe = onAuthStateChanged(auth, (user) => {
         if (user) {
@@ -227,7 +140,6 @@ const Login = () => {
         }
       });
     } catch (err) {
-      handleRateLimit();
 
       if (err instanceof Error) {
         if (err.message.includes("popup-closed-by-user")) {
@@ -360,15 +272,6 @@ const Login = () => {
               </div>
             </div>
 
-            {isBlocked && (
-              <div className="mt-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
-                <div className="flex items-center gap-2 text-red-700 dark:text-red-400 text-sm">
-                  <AlertCircle className="h-4 w-4" />
-                  <span>Too many failed attempts. Try again in {formatTime(blockTimeRemaining)}</span>
-                </div>
-              </div>
-            )}
-
             <div className="flex flex-col pt-5 pb-5">
               <Button
                 type="submit"
@@ -394,11 +297,6 @@ const Login = () => {
                 </div>
               )}
 
-              {attemptCount > 0 && attemptCount < MAX_ATTEMPTS && !isBlocked && (
-                <div className="text-amber-600 dark:text-amber-400 text-sm pt-2">
-                  Warning: {MAX_ATTEMPTS - attemptCount} attempts remaining
-                </div>
-              )}
             </div>
           </form>
 
