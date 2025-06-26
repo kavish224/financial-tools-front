@@ -3,7 +3,6 @@ import "./globals.css";
 import { AuthProvider } from "@/components/AuthProvider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/next"
-import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Create Next App",
