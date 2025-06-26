@@ -26,8 +26,8 @@ const MarketDashboard: React.FC = () => {
         <div className="p-4">
             <h2 className="text-xl font-semibold mb-4">Market and Sectors</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {mockData.map((data) => (
-                    <SectorCard key={data.name} data={data} />
+                {mockData.map((data, i) => (
+                    <SectorCard key={i} data={data} />
                 ))}
             </div>
         </div>
