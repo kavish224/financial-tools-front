@@ -18,6 +18,8 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <meta name="google-adsense-account" content="ca-pub-4213724490364096"></meta>
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4213724490364096"
+          crossOrigin="anonymous"></script>
       </head>
       <body className="">
         <script
