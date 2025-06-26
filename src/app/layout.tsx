@@ -3,6 +3,7 @@ import "./globals.css";
 import { AuthProvider } from "@/components/AuthProvider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Analytics } from "@vercel/analytics/next"
+import Script from "next/script";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,16 +18,22 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="">
-      <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-        <AuthProvider>
-          {children}
-          <Analytics />
-        </AuthProvider>
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4213724490364096"
+          crossOrigin="anonymous"
+        ></script>
+
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AuthProvider>
+            {children}
+            <Analytics />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>
